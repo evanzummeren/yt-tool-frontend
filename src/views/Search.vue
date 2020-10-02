@@ -65,7 +65,7 @@ export default {
       console.log(str);
 
       axios.post(serverCredentials.url, {
-        "size": 20,
+        "size": 100,
         "from": 0,
         "sort" : [
           { "date" : {"order" : "desc"}},
@@ -167,7 +167,6 @@ input {
   background: #1D1D1D;
   z-index: 100;
   width: calc(100vw - 5rem);
-  height: calc(100vh - 2rem);
   position: absolute;
   left: 2rem;
   top: 2rem;

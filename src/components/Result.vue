@@ -1,7 +1,23 @@
 <template>
 <div class="singleresult">
-  <span class="date">{{date}}</span>
-  <span class="user">{{author}}</span>
+  <div class="dateline"></div>
+  <div class="horizontalline" v-if="render.date"></div>
+  <span class="date" v-if="render.date">{{this.formattedDate}}</span>
+  <span class="user" v-if="render.author">{{author}}</span>
+  <svg version="1.1" class="laag" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 156.5 578.5" style="enable-background:new 0 0 156.5 578.5;" xml:space="preserve">
+<g>
+	<path class="st0" d="M156.5,1157.5"/>
+</g>
+<g>
+	<path class="st0" d="M156.5,577.5C103.8,577.5,1,534.8,1,482s22.8-95.5,75.5-95.5"/>
+</g>
+<g>
+	<path class="st0" d="M76.5,384.8C23.8,384.8,1,342,1,289.3s12.8-95.5,65.5-95.5"/>
+</g>
+<g>
+	<path class="st0" d="M66.5,192C13.8,192,1,149.2,1,96.5S103.8,1,156.5,1"/>
+</g>
+</svg>
   <span class="blurtext">this text will be loaded in</span>
   <div  v-html="resultline">
    {{resultline}} 
@@ -20,19 +36,28 @@ export default {
   data: function() {
     return {
       author: '',
-      date: ''
+      date: '',
+      formatttedDatte: '',
+      render: {
+        date: true,
+        author: true
+      }
     }
   },
   mounted: function() {
     this.author = this.additionalmeta.user;
     this.date = this.additionalmeta.date;
+    this.formattedDate = moment(this.additionalmeta.date).format('LL');
 
-    console.log(moment(this.date).format());
+    if (this.date === this.preresult.inner_hits.video.hits.hits[0]._source.date) {
+      this.render.date = false
+    }
 
+    if (this.author === this.preresult.inner_hits.video.hits.hits[0]._source.user) {
+      this.render.author = false
+    }
 
-    // moment("1946-05-21")
-    console.log('fo;asdflas');
-    console.log('hmm ',  this.preresult);
+    console.log('hmm ',  this.preresult.inner_hits.video.hits.hits[0]._source.user);
     console.log(this.additionalmeta);
   }
 }
@@ -62,6 +87,7 @@ export default {
   position: absolute;
   z-index: 10;
   font-size: .8rem;
+  color: #959595;
   background: #353535;
   display: block;
   height: calc(1rem + 3px);
@@ -80,10 +106,34 @@ export default {
   padding: 0 .5rem;
 }
 
-// .hit {
-//   color: #D3C8FF;
-//   display: inline;
-//   padding: 0 .5rem;
-//   background: linear-gradient(180deg, rgba(29,29,29,1) 45%, rgba(79,35,255,1) 45%, rgba(79,35,255,1) 70%, rgba(29,29,29,1) 70%);
-// }
+.dateline {
+  margin-left: 1rem;
+  width: 1px;
+  background: #353535;
+  position: absolute;
+  height: 6rem;
+}
+
+.horizontalline {
+  margin-left: 1rem;
+  width: 4rem;
+  background: #353535;
+  position: absolute;
+  height: 1px;
+}
+
+.st0{
+  fill:none;
+  stroke:white;
+  // stroke-width:2;
+  // stroke-miterlimit:10;
+  // stroke-dasharray:2,4;
+}
+
+.laag {
+  position: absolute;
+  width: 26px;
+  margin-left: 34px;
+  margin-top: 144px;
+}
 </style>
