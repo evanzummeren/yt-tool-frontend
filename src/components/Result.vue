@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'Result',
   props: ['resultline', 'additionalmeta', 'preresult'],
@@ -24,6 +26,11 @@ export default {
   mounted: function() {
     this.author = this.additionalmeta.user;
     this.date = this.additionalmeta.date;
+
+    console.log(moment(this.date).format());
+
+
+    // moment("1946-05-21")
     console.log('fo;asdflas');
     console.log('hmm ',  this.preresult);
     console.log(this.additionalmeta);
