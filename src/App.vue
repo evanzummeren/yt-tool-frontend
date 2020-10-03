@@ -33,6 +33,11 @@ export default {
   src: url("./assets/fonts/fl-mono.woff") format("woff");
 }
 
+@font-face {
+  font-family: "Gil";
+  src: url("./assets/fonts/gil-reg.woff") format("woff");
+}
+
 body {
   font-size: 16px;
   background: black;

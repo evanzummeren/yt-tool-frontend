@@ -1,14 +1,17 @@
 <template>
   <div class="container">
 
+    <!-- <SearchMenu v-if="showSearchMenu"/> -->
+    <SearchMenu v-if="true"/>
+
     <header>
       <input 
         v-model="keyword" 
         v-on:keyup.enter="performSearch"
         placeholder="search">
-      <div class="categories">qanon, breadtube</div>
-      <div class="categories">sort</div>
-      <div class="categories">10.01.2008 - 10.04.2020</div>
+      <div class="categories" @click="openSearchMenu">qanon, breadtube</div>
+      <div class="categories" @click="openSearchMenu">sort</div>
+      <div class="categories" @click="openSearchMenu">10.01.2008 - 10.04.2020</div>
     </header>
 
     <ul>
@@ -26,6 +29,9 @@
 
 <script>
 import Result from '../components/Result.vue';
+import SearchMenu from '../components/SearchMenu.vue';
+
+
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
 // @ is an alias to /src
@@ -36,10 +42,16 @@ import serverCredentials from '../mixins/server.json';
 export default {
   name: 'Home',
   components: {
-    Result
+    Result, SearchMenu
   },
   data: function() {
     return {
+      searchOptions: {
+        categories: ['altright'],
+        sort: "",
+        filter: []
+      },
+      showSearchMenu: false,
       keyword: "",
       results: []
     }
@@ -51,6 +63,9 @@ export default {
     this.processCall(this.$route.params.query);
   },
   methods: {
+    openSearchMenu() {
+      this.showSearchMenu = !this.showSearchMenu;
+    },
     performSearch() {
       this.results = [];
       this.processCall(this.keyword);
