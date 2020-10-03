@@ -1,50 +1,54 @@
 <template>
-<div class="singleresult">
+<div class="singleresult" @click="loadAdditionalLines" v-bind:style="{ marginLeft: '-' + widthAdjustment + 'px' }">
   <div class="dateline"></div>
   <div class="horizontalline" v-if="render.date"></div>
   <span class="date" v-if="render.date">{{this.formattedDate}}</span>
   <span class="user" v-if="render.author">{{author}}</span>
-  <svg version="1.1" class="laag" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 156.5 578.5" style="enable-background:new 0 0 156.5 578.5;" xml:space="preserve">
-<g>
-	<path class="st0" d="M156.5,1157.5"/>
-</g>
-<g>
-	<path class="st0" d="M156.5,577.5C103.8,577.5,1,534.8,1,482s22.8-95.5,75.5-95.5"/>
-</g>
-<g>
-	<path class="st0" d="M76.5,384.8C23.8,384.8,1,342,1,289.3s12.8-95.5,65.5-95.5"/>
-</g>
-<g>
-	<path class="st0" d="M66.5,192C13.8,192,1,149.2,1,96.5S103.8,1,156.5,1"/>
-</g>
-</svg>
-  <span class="blurtext">this text will be loaded in</span>
-  <div  v-html="resultline">
-   {{resultline}} 
-  <!-- ause we all know they are returning <span class="hit">elite pedophile ring</span> because we all know they are returning -->
+
+  <div class="authorbeginline" v-if="render.author"></div>
+  <div class="authorbeginline--horizontal" v-if="render.author"></div>
+  <div class="authorbeginline--horizontalmiddle" v-if="!render.author"></div>
+  <div class="authormiddlecircle" v-if="!render.author"></div>
+  <div class="authorline" v-if="!render.author"></div>
+
+  <span v-bind:class="{ blurtext: text.blur, unblurredtext: !text.blur }" ref="firsttext">{{text.prevLine}}</span>
+  <div v-html="resultline.highlight.line[0]" ref="highlightedtext">
+   {{resultline.highlight.line[0]}} 
   </div>
-  <span class="blurtext">and this one as well</span>
+  <span v-bind:class="{ blurtext: text.blur, unblurredtext: !text.blur }">{{text.nextLine}}</span>
 </div>
 </template>
 
 <script>
 import moment from 'moment';
+const axios = require('axios');
+import serverCredentials from '../mixins/server.json';
 
 export default {
   name: 'Result',
-  props: ['resultline', 'additionalmeta', 'preresult'],
+  props: ['resultline', 'additionalmeta', 'preresult', 'nextresult'],
   data: function() {
     return {
       author: '',
       date: '',
       formatttedDatte: '',
+      posHighlight: {},
+      widthAdjustment: 0,
+      text: {
+        blur: true,
+        prevLine: "this text will be loaded in",
+        nextLine: "and this one as well"
+      },
       render: {
         date: true,
-        author: true
+        author: true,
+        lastline: false
       }
     }
   },
   mounted: function() {
+    this.posHighlight = this.$refs.highlightedtext.getBoundingClientRect();
+
     this.author = this.additionalmeta.user;
     this.date = this.additionalmeta.date;
     this.formattedDate = moment(this.additionalmeta.date).format('LL');
@@ -53,12 +57,63 @@ export default {
       this.render.date = false
     }
 
-    if (this.author === this.preresult.inner_hits.video.hits.hits[0]._source.user) {
+    if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user) {
       this.render.author = false
     }
 
-    console.log('hmm ',  this.preresult.inner_hits.video.hits.hits[0]._source.user);
-    console.log(this.additionalmeta);
+    if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user && this.author !== this.preresult.inner_hits.video.hits.hits[0]._source.user) {
+      this.render.lastline = true
+    }
+  },
+  methods: {
+    loadAdditionalLines() {
+
+      let vidid = this.resultline._id.slice(0,12);
+      let pos = this.resultline._id.slice(12,20);
+      let prevId = vidid.concat(Number(pos) -1);
+      let nextId = vidid.concat(Number(pos) +1);
+
+      var _this = this;
+
+      axios.post(serverCredentials.url, {
+        "size": 20,
+        "from": 0,
+        "query": {
+          "bool": {
+            "should": [
+              {"match": { "_id": prevId } },	
+              {"match": { "_id": nextId } }
+            ]
+          }
+        }
+      })
+      .then(function (response) {
+        // console.log(response.data.hits.hits[0]._source.line);
+        // console.log(_this.text)
+        _this.text.blur = false;
+        _this.text.prevLine = response.data.hits.hits[0]._source.line;
+        _this.text.nextLine = response.data.hits.hits[1]._source.line;
+        // console.log(response.data.hits.hits)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+console.log(this.posHighlight);
+      setTimeout(function(){ 
+        let n = Math.abs(_this.posHighlight.left - _this.$refs.highlightedtext.getBoundingClientRect().left)
+        _this.widthAdjustment = n;
+        console.log(n)
+
+
+
+       }, 200);
+
+
+
+
+
+    }
   }
 }
 </script>
@@ -81,6 +136,23 @@ export default {
   color: transparent;
   text-shadow: 0 0 7px rgba(255,255,255,0.7);
   margin: 0 .5rem;
+}
+
+.unblurredtext {
+  color: transparent;
+	animation: blur 2s ease-out forwards;
+  margin: 0 .5rem;
+}
+
+@keyframes blur {
+	0%		{  text-shadow: 0 0 7px rgba(255,255,255,0.7); }
+	// 5%		{text-shadow:  0 0 90px #fff;}
+	// 15%		{opacity: 1;}
+	// 20%		{text-shadow:  0 0 0px #fff;}
+	// 80%		{text-shadow:  0 0 0px #fff;}
+	// 85%		{opacity: 1;}
+	// 95%		{text-shadow:  0 0 90px #fff;}
+	100%	{  text-shadow: 0 0 0px #BBBBBB; opacity: 1 }
 }
 
 .date {
@@ -122,18 +194,44 @@ export default {
   height: 1px;
 }
 
-.st0{
-  fill:none;
-  stroke:white;
-  // stroke-width:2;
-  // stroke-miterlimit:10;
-  // stroke-dasharray:2,4;
+.authorbeginline {
+  width:  1px;
+  border-left: 1px dotted #BBBBBB;
+  margin-top: 3rem;
+  height: 3rem;
+  position: absolute;
+  left: 2.5rem;
+    &--horizontal {
+    @extend .authorbeginline;
+    border-top: 1px dotted #BBBBBB;
+    height: 1px;
+    width: 1rem;
+    // mtop: 3rem;
+  }
+  &--horizontalmiddle {
+    @extend .authorbeginline;
+    border-top: 1px dotted #636363;
+    height: 1px;
+    width: 1rem;
+    // mtop: 3rem;
+  }
 }
 
-.laag {
+.authormiddlecircle {
+  width: 10px;
+  height: 10px;
+  margin-left: 3.5rem;
+  margin-top: 2.75rem;
   position: absolute;
-  width: 26px;
-  margin-left: 34px;
-  margin-top: 144px;
+  border: 1px solid #636363;
+  border-radius: 20px;
+}
+
+.authorline {
+  width:  1px;
+  border-left: 1px dotted #BBBBBB;
+  height: 6rem;
+  position: absolute;
+  left: 2.5rem;
 }
 </style>

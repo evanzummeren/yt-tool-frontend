@@ -10,8 +10,6 @@
       <div class="firstsingleline"></div>
       <div class="secondsingleline"></div>
       <div class="verticalsingleline"></div>
-
-
     </div>
   </div>
 </template>

@@ -17,9 +17,11 @@
         <Result />
         <li v-for="(result, index) in results" v-bind:key="result">
           <Result 
+
             :additionalmeta="result.inner_hits.video.hits.hits[0]._source"
-            :resultline="result.highlight.line[0]"
-            :preresult="results[index - 1]" />
+            :resultline="result"
+            :preresult="results[index - 1]"
+            :nextresult="results[index + 1]" />
           <!-- {{ result }} -->
         </li>
       </ul>
@@ -34,6 +36,8 @@ const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
+
+// http://localhost:8080/search/q/%22q%20says%22/cat/blabla
 
 export default {
   name: 'Home',
@@ -68,7 +72,7 @@ export default {
         "size": 100,
         "from": 0,
         "sort" : [
-          { "date" : {"order" : "desc"}},
+          { "date" : {"order" : "desc"} },
           // "_score"
         ],
         "query": {
@@ -115,9 +119,9 @@ export default {
     }
       })
       .then(function (response) {
-        console.log('bla')
+        console.log('bambamabam')
+        console.log(response)
         response.data.hits.hits.forEach(el => {
-          console.log(el)
           _this.results.push(el)
         });
 
