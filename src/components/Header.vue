@@ -48,7 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   height: 400px;

@@ -11,27 +11,21 @@
       <div class="categories">10.01.2008 - 10.04.2020</div>
     </header>
 
-
-
-      <ul>
-        <Result />
-        <li v-for="(result, index) in results" v-bind:key="result">
-          <Result 
-
-            :additionalmeta="result.inner_hits.video.hits.hits[0]._source"
-            :resultline="result"
-            :preresult="results[index - 1]"
-            :nextresult="results[index + 1]" />
-          <!-- {{ result }} -->
-        </li>
-      </ul>
+    <ul>
+      <li v-for="(result, index) in results" v-bind:key="index">
+        <Result 
+          :additionalmeta="result.inner_hits.video.hits.hits[0]._source"
+          :resultline="result"
+          :preresult="results[index - 1]"
+          :nextresult="results[index + 1]" />
+      </li>
+    </ul>
 
   </div>
 </template>
 
 <script>
 import Result from '../components/Result.vue';
-// import ElasticCall from '../mixins/elastic-call.js';
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
 // @ is an alias to /src
@@ -53,11 +47,13 @@ export default {
   beforeCreate: function() {
   },
   mounted: function() {
+    this.keyword = this.$route.params.query;
     this.processCall(this.$route.params.query);
   },
   methods: {
     performSearch() {
-      // console.log(this.message)
+      this.results = [];
+      this.processCall(this.keyword);
       this.$router.push(`../../../../search/q/${this.keyword}/cat/blabla`)
     },
     processCall(str) {
@@ -119,13 +115,10 @@ export default {
     }
       })
       .then(function (response) {
-        console.log('bambamabam')
-        console.log(response)
+        console.log('response coming in')
         response.data.hits.hits.forEach(el => {
           _this.results.push(el)
         });
-
-        // _this.results.push('a')
       })
       .catch(function (error) {
         console.log(error);
@@ -142,6 +135,8 @@ header {
   border-bottom: 1px solid #8A8A8A;
   height: 2rem;
   display: flex;
+  position: fixed;
+  z-index: 100;
 }
 
 input { 
@@ -177,8 +172,9 @@ input {
 }
 
 ul {
-  margin: 0;
+  margin: 2rem 0 0 0;
   padding: 0;
+  list-style-type: none;
 }
 
 .categories {

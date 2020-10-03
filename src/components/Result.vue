@@ -31,7 +31,7 @@ export default {
     return {
       author: '',
       date: '',
-      formatttedDatte: '',
+      formattedDate: '',
       posHighlight: {},
       widthAdjustment: 0,
       text: {
@@ -107,7 +107,7 @@ console.log(this.posHighlight);
 
 
 
-       }, 200);
+       }, 400);
 
 
 
@@ -130,6 +130,7 @@ console.log(this.posHighlight);
   white-space: nowrap;
   position: relative;
   text-align: center;
+  overflow-x: scroll;
 }
 
 .blurtext {
