@@ -32,15 +32,29 @@
         <ul>
           <li>start date</li>
           <li>end date</li>
-          <li>specific user</li>
+          <li>specific channel</li>
           <li>popularity</li>
         </ul>
       </div>
     </div>
+
+<div class="window">
+          <div
+        class="window__bar"
+        :ref="'single_' + index"
+        v-for="index in 120" 
+        :key="index">
+        <div class="window__barwhitefill"></div>
+
+        </div>
+      </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
+import anime from 'animejs/lib/anime.es.js';
+
 export default {
   name: "SearchMenu",
   data: function() {
@@ -49,9 +63,43 @@ export default {
       checkedCats: []
     }
   },
+  mounted: function() {
+    anime({
+      targets: '.window__bar',
+      height: function() { return 500 + anime.random(0, 100); },
+      duration: 2000,
+      delay: function(el, i) { return i * 7; },
+    });
+
+    this.animatePianoKeys(); 
+  },
   methods: {
     selectSort: function(sortType) {
       this.sort = sortType;
+    },
+    animatePianoKeys() {
+      anime({
+        targets: '.window__barwhitefill',
+        height: function(el, i) { 
+          var a = i / 180 * Math.PI;
+          var x = Math.cos(a);
+          var y = Math.sin(a);
+          var d = Math.sqrt((1-x) ** 2 + y**2);
+
+          return d * 20 
+        },
+        opacity: function(el, i) {
+          var n = anime.random(-2, 1);
+          if (n < 0) {
+            return 0
+          } else {
+            return 1
+          }
+        },
+        duration: 3000,
+        delay: function(el, i) { return i * 7; },
+        ease: 'easeInOutQuad'
+      });
     }
   }
 }
@@ -133,7 +181,7 @@ input:checked + label {
   width: 100vw;
   height: 500px;
   z-index: 50;
-  background: black;
+  // background: black;
   position: fixed;
   margin-left: -2rem;
   margin-top: -2rem;
@@ -176,5 +224,30 @@ h3 {
 .filter {
   width: 15rem;
   height: 500px;
+}
+
+.window {
+  width: 100vw;
+  height: 500px;
+  padding-left: 1rem;
+  display: flex;
+  position: absolute;
+  top: 0;
+  z-index: -10;
+  left: 1rem;
+}
+
+.window__bar {
+  width: 1rem;
+  height: 0%;
+  background: #1D1D1D;
+  display: flex;
+}
+
+.window__barwhitefill {
+  background: white;
+  width: 100%;
+  height: 0;
+  align-self: flex-end;
 }
 </style>

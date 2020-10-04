@@ -6,6 +6,7 @@
 
     <header>
       <input 
+        class="searchinput"
         v-model="keyword" 
         v-on:keyup.enter="performSearch"
         placeholder="search">
@@ -40,7 +41,7 @@
 import Result from '../components/Result.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
-import anime from 'animejs/lib/anime.es.js';
+// import anime from 'animejs/lib/anime.es.js';
 const axios = require('axios');
 
 import serverCredentials from '../mixins/server.json';
@@ -192,6 +193,10 @@ header {
   cursor: pointer;
 }
 
+.searchinput:hover {
+  background-color: #f1f1f1;
+}
+
 input { 
   outline: none !important; 
   -webkit-appearance: none; 
@@ -212,6 +217,8 @@ input {
   color: black;
   padding-left: 3rem;
 }
+
+
 
 :-webkit-autofill { color: #fff !important; }
 
@@ -241,5 +248,40 @@ ul {
   font-family: 'Flaco-mono';
   border-left: 1px solid #2F2F2F;
   font-size: .9rem;
+  cursor: pointer;
+}
+
+.categories:hover {
+  animation-duration: 2s;
+  animation-name: flicker;
+  animation-timing-function:linear;
+  animation-fill-mode:forwards;
+  animation-iteration-count: 1;
+}
+
+
+@keyframes flicker {
+  0% {
+  background-color: black;
+  color: white;
+  }
+
+  10% {
+  background-color: #B2B2B2;
+  color: black;
+  }
+
+  20% {
+  background-color: black;
+  color: white;
+  }
+
+
+  60% {
+  background-color: black;
+  color: white;
+  }
+
+
 }
 </style>
