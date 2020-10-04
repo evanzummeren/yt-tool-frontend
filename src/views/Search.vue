@@ -40,8 +40,9 @@
 import Result from '../components/Result.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
-
+import anime from 'animejs/lib/anime.es.js';
 const axios = require('axios');
+
 import serverCredentials from '../mixins/server.json';
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
