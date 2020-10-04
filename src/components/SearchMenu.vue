@@ -28,10 +28,21 @@
         </ul>
       </div>
       <div class="filter searchmenu__space">
-        <h3>filter</h3>
-        <ul>
+        <h3>filters</h3>
+        <ul class="filters">
           <li>start date</li>
+            <DatePicker 
+              v-model='selectedFirstDate' 
+                :value="null"
+                color="purple"
+                is-dark />
+
           <li>end date</li>
+            <DatePicker 
+              v-model='selectedSecondDate' 
+                :value="null"
+                color="purple"
+                is-dark />
           <li>specific channel</li>
           <li>popularity</li>
         </ul>
@@ -54,12 +65,19 @@
 <script>
 /* eslint-disable no-unused-vars */
 import anime from 'animejs/lib/anime.es.js';
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+
 
 export default {
   name: "SearchMenu",
+  components: {
+    DatePicker
+  },
   data: function() {
     return {
       sort: 'newest',
+      selectedFirstDate: new Date(2005, 1, 14),
+      selectedSecondDate: new Date(),
       checkedCats: []
     }
   },
@@ -70,6 +88,15 @@ export default {
       duration: 2000,
       delay: function(el, i) { return i * 7; },
     });
+
+    anime({
+      targets: '.searchmenu__space',
+      opacity: [0, 1],
+      duration: 1000,
+      easing: 'easeInOutExpo',
+      transformX: [-10, 0],
+      delay: 1000,
+    })
 
     this.animatePianoKeys(); 
   },
@@ -162,9 +189,6 @@ input[type=checkbox]:checked + label:before {
   color: #fff;
 }
 
-
-
-
 label {
   margin-left: .3rem;
   font-family: 'Flaco';
@@ -189,6 +213,7 @@ input:checked + label {
 }
 
 .searchmenu__space {
+  opacity: 0;
   padding: 1.5rem 1rem;
 }
 
@@ -249,5 +274,9 @@ h3 {
   width: 100%;
   height: 0;
   align-self: flex-end;
+}
+
+.filters li {
+  margin-top: 4px;
 }
 </style>

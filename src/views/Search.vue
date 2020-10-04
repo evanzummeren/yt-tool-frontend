@@ -12,7 +12,7 @@
         placeholder="search">
       <div class="categories" @click="openSearchMenu">qanon, breadtube</div>
       <div class="categories" @click="openSearchMenu">sort</div>
-      <div class="categories" @click="openSearchMenu">10.01.2008 - 10.04.2020</div>
+      <div class="categories" @click="openSearchMenu">filters [2]</div>
       <div class="verticalline--top"></div>
       <div class="verticalline--header"></div>
       <div class="menu">

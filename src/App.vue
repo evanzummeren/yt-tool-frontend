@@ -62,4 +62,35 @@ body {
   padding: 0 .5rem;
   background: linear-gradient(180deg, rgba(29,29,29,1) 45%, rgba(79,35,255,1) 45%, rgba(79,35,255,1) 70%, rgba(29,29,29,1) 70%);
 }
+
+/* Date picker */
+.vc-border-gray-700 {
+  border-color: #4f23ff !important;
+}
+
+.vc-bg-gray-900 {
+  background-color: black !important;
+}
+
+.vc-text-gray-200 {
+  color: #B2B2B2 !important;
+  font-family: 'Flaco' !important;
+}
+
+.vc-text-gray-100 {
+  color: white !important;
+  font-family: 'Flaco' !important;
+}
+
+.vc-appearance-none {
+  background: none !important;
+  border: none  !important;
+  border-bottom: 1px dotted white !important;
+  color: white !important;
+  font-family: 'Flaco' !important;
+  font-size: .8rem  !important;
+  border-radius: 0 !important;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
 </style>
