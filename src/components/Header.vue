@@ -9,7 +9,10 @@
       
       <div class="firstsingleline"></div>
       <div class="secondsingleline"></div>
-      <div class="verticalsingleline"></div>
+
+      <div class="estheticallines">
+        <div class="verticalsingleline"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -126,5 +129,9 @@ export default {
   background-color: #4F23FF;
   margin-left: 2rem;
   z-index: 1000;
+}
+
+.estheticallines {
+  position: fixed;
 }
 </style>>

@@ -1,8 +1,8 @@
 <template>
   <div class="container">
 
-    <!-- <SearchMenu v-if="showSearchMenu"/> -->
-    <SearchMenu v-if="true"/>
+    <SearchMenu v-if="showSearchMenu"/>
+    <!-- <SearchMenu v-if="true"/> -->
 
     <header>
       <input 
@@ -12,6 +12,15 @@
       <div class="categories" @click="openSearchMenu">qanon, breadtube</div>
       <div class="categories" @click="openSearchMenu">sort</div>
       <div class="categories" @click="openSearchMenu">10.01.2008 - 10.04.2020</div>
+      <div class="verticalline--top"></div>
+      <div class="verticalline--header"></div>
+      <div class="menu">
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.0762 1.84757H0.923788C0.406467 1.84757 0 1.44111 0 0.923787C0 0.406467 0.406467 0 0.923788 0H15.0762C15.5935 0 16 0.406467 16 0.923787C16 1.44111 15.5935 1.84757 15.0762 1.84757Z" fill="white"/>
+          <path d="M15.0762 5.54289H0.923788C0.406467 5.54289 0 5.13642 0 4.6191C0 4.10178 0.406467 3.69531 0.923788 3.69531H15.0762C15.5935 3.69531 16 4.10178 16 4.6191C16 5.13642 15.5935 5.54289 15.0762 5.54289Z" fill="white"/>
+          <path d="M15.0762 9.23771H0.923788C0.406467 9.23771 0 8.83125 0 8.31392C0 7.7966 0.406467 7.39014 0.923788 7.39014H15.0762C15.5935 7.39014 16 7.7966 16 8.31392C16 8.83125 15.5935 9.23771 15.0762 9.23771Z" fill="white"/>
+        </svg>
+      </div>
     </header>
 
     <ul>
@@ -152,6 +161,34 @@ header {
   display: flex;
   position: fixed;
   z-index: 100;
+  width: calc(100% - 2rem);
+  background: black;
+}
+
+.verticalline--top {
+  width: 1px;
+  height: 2rem;
+  background: #474747;
+  position: absolute;
+  margin-top: -2rem;
+  right: calc(3rem + 1px);
+}
+
+.verticalline--header {
+  width: 1px;
+  height: 2rem;
+  background: #8A8A8A;
+  position: absolute;
+  right: calc(3rem + 1px);
+}
+
+.menu {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: -.5rem;
+  right: 2.6rem;
+  cursor: pointer;
 }
 
 input { 
@@ -184,6 +221,8 @@ input {
   position: absolute;
   left: 2rem;
   top: 2rem;
+  border-left: 1px solid #4F23FF;
+  border-right: 1px solid #8A8A8A;
 }
 
 ul {
@@ -202,5 +241,4 @@ ul {
   border-left: 1px solid #2F2F2F;
   font-size: .9rem;
 }
-
 </style>

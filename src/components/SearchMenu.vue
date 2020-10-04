@@ -21,14 +21,20 @@
       <div class="sort searchmenu__space">
         <h3>sort</h3>
         <ul>
-          <li>newest</li>
-          <li>oldest</li>
-          <li>most popular</li>
-          <li>most relevant</li>
+          <li v-bind:class="{ on: sort === 'newest' }" @click="selectSort('newest')">newest</li>
+          <li v-bind:class="{ on: sort === 'oldest' }" @click="selectSort('oldest')">oldest</li>
+          <li v-bind:class="{ on: sort === 'mostpopular' }" @click="selectSort('mostpopular')">most popular</li>
+          <li v-bind:class="{ on: sort === 'mostrelevant' }" @click="selectSort('mostrelevant')">most relevant</li>
         </ul>
       </div>
       <div class="filter searchmenu__space">
         <h3>filter</h3>
+        <ul>
+          <li>start date</li>
+          <li>end date</li>
+          <li>specific user</li>
+          <li>popularity</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -39,13 +45,24 @@ export default {
   name: "SearchMenu",
   data: function() {
     return {
+      sort: 'newest',
       checkedCats: []
+    }
+  },
+  methods: {
+    selectSort: function(sortType) {
+      this.sort = sortType;
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.on {
+  color: white;
+  cursor: default;
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -57,6 +74,7 @@ ul {
 li {
   margin-top: .3rem;
   color: #B2B2B2;
+  cursor: pointer;
 }
 
 
