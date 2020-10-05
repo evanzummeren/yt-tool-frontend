@@ -60,7 +60,7 @@ body {
   color: #D3C8FF;
   display: inline;
   padding: 0 .5rem;
-  background: linear-gradient(180deg, rgba(29,29,29,1) 45%, rgba(79,35,255,1) 45%, rgba(79,35,255,1) 70%, rgba(29,29,29,1) 70%);
+  background: linear-gradient(180deg, rgba(29,29,29,0) 45%, rgba(79,35,255,1) 45%, rgba(79,35,255,1) 70%, rgba(29,29,29,0) 70%);
 }
 
 /* Date picker */
@@ -92,5 +92,13 @@ body {
   border-radius: 0 !important;
   margin-top: 5px;
   margin-bottom: 10px;
+}
+
+#sprite {
+  width: 100%;
+  top: 0;
+  position: absolute;
+  left: 0;
+  filter: grayscale(100%);
 }
 </style>

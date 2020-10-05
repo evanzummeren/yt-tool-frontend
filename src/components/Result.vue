@@ -1,21 +1,46 @@
 <template>
-<div class="singleresult" @click="loadAdditionalLines" v-bind:style="{ marginLeft: '-' + widthAdjustment + 'px' }">
-  <div class="dateline"></div>
-  <div class="horizontalline" v-if="render.date"></div>
-  <span class="date" v-if="render.date">{{this.formattedDate}}</span>
-  <span class="user" v-if="render.author">{{author}}</span>
+<div 
+  class="singleresult" 
+  @click="loadAdditionalLines"
+  ref="singleLine"
+  @mouseover="showScreenshot = true; addTracking()"
+  @mouseleave="showScreenshot = false; removeTracking()"
+  v-bind:style="{ marginLeft: '-' + widthAdjustment + 'px' }">
 
-  <div class="authorbeginline" v-if="render.author"></div>
-  <div class="authorbeginline--horizontal" v-if="render.author"></div>
-  <div class="authorbeginline--horizontalmiddle" v-if="!render.author"></div>
-  <div class="authormiddlecircle" v-if="!render.author"></div>
-  <div class="authorline" v-if="!render.author"></div>
+    <div class="dateline"></div>
+    <div class="horizontalline" v-if="render.date"></div>
+    <span class="date" v-if="render.date">{{this.formattedDate}}</span>
+    <span class="user" v-if="render.author">{{author}}</span>
 
-  <span v-bind:class="{ blurtext: text.blur, unblurredtext: !text.blur }" ref="firsttext">{{text.prevLine}}</span>
-  <div v-html="resultline.highlight.line[0]" ref="highlightedtext">
-   {{resultline.highlight.line[0]}} 
-  </div>
-  <span v-bind:class="{ blurtext: text.blur, unblurredtext: !text.blur }">{{text.nextLine}}</span>
+    <div class="authorbeginline" v-if="render.author"></div>
+    <div class="authorbeginline--horizontal" v-if="render.author"></div>
+    <div class="authorbeginline--horizontalmiddle" v-if="!render.author"></div>
+    <div class="authormiddlecircle" v-if="!render.author"></div>
+    <div class="authorline" v-if="!render.author"></div>
+
+    <div class="linecontent">
+      <span v-bind:class="{ 'blurtext firstline': text.blur, 'unblurredtext firstline': !text.blur }">{{text.prevLine}}</span>
+      <div v-html="resultline.highlight.line[0]" ref="highlightedtext">
+      {{resultline.highlight.line[0]}} 
+      </div>
+      <span v-bind:class="{ 'blurtext secondline': text.blur, 'unblurredtext secondline': !text.blur }">{{text.nextLine}}</span>
+    </div>
+
+    <Screenshot 
+      :mouseX="mouseX"
+      v-if="showScreenshot" />
+
+    <div 
+      class="exportlinks"
+      v-if="showScreenshot">
+      <div class="context"></div>
+      <a :href="'https://www.youtube.com/watch?v=' + additionalmeta.id" target="_blank">
+      <div class="watch"></div>
+      </a>
+
+    </div>
+
+
 </div>
 </template>
 
@@ -24,20 +49,25 @@ import moment from 'moment';
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
 
+import Screenshot from './Screenshot.vue'
+
 export default {
   name: 'Result',
   props: ['resultline', 'additionalmeta', 'preresult', 'nextresult'],
+  components: { Screenshot },
   data: function() {
     return {
       author: '',
       date: '',
       formattedDate: '',
+      mouseX: 0,
+      showScreenshot: false,
       posHighlight: {},
       widthAdjustment: 0,
       text: {
         blur: true,
-        prevLine: "this text will be loaded in",
-        nextLine: "and this one as well"
+        prevLine: "this text will be loaded in and some",
+        nextLine: "and this one as well and here as well of course"
       },
       render: {
         date: true,
@@ -47,6 +77,8 @@ export default {
     }
   },
   mounted: function() {
+    console.log('blabla')
+    console.log(this.additionalmeta.id);
     this.posHighlight = this.$refs.highlightedtext.getBoundingClientRect();
 
     this.author = this.additionalmeta.user;
@@ -88,31 +120,24 @@ export default {
         }
       })
       .then(function (response) {
-        // console.log(response.data.hits.hits[0]._source.line);
-        // console.log(_this.text)
         _this.text.blur = false;
         _this.text.prevLine = response.data.hits.hits[0]._source.line;
         _this.text.nextLine = response.data.hits.hits[1]._source.line;
-        // console.log(response.data.hits.hits)
       })
       .catch(function (error) {
         console.log(error);
       });
-
-console.log(this.posHighlight);
-      setTimeout(function(){ 
-        let n = Math.abs(_this.posHighlight.left - _this.$refs.highlightedtext.getBoundingClientRect().left)
-        _this.widthAdjustment = n;
-        console.log(n)
-
-
-
-       }, 400);
-
-
-
-
-
+    },
+    addTracking() {
+      this.$refs.singleLine.addEventListener("mousemove", this.mousePosition);
+    },
+    removeTracking() {
+      this.$refs.singleLine.removeEventListener("mousedown", this.mousePosition, true);
+    },
+    mousePosition() {
+      let e = e || window.event;
+      let xOffset = this.$refs.singleLine.getBoundingClientRect().x;
+      this.mouseX = e.pageX - xOffset - 50;
     }
   }
 }
@@ -127,10 +152,8 @@ console.log(this.posHighlight);
   font-size: 1.2rem;
   line-height: 6rem;
   border-bottom: 1px dotted #2f2f2f;
-  white-space: nowrap;
   position: relative;
   text-align: center;
-  overflow-x: scroll;
 }
 
 .blurtext {
@@ -140,19 +163,13 @@ console.log(this.posHighlight);
 }
 
 .unblurredtext {
-  color: transparent;
+  color: white;
 	animation: blur 2s ease-out forwards;
   margin: 0 .5rem;
 }
 
 @keyframes blur {
 	0%		{  text-shadow: 0 0 7px rgba(255,255,255,0.7); }
-	// 5%		{text-shadow:  0 0 90px #fff;}
-	// 15%		{opacity: 1;}
-	// 20%		{text-shadow:  0 0 0px #fff;}
-	// 80%		{text-shadow:  0 0 0px #fff;}
-	// 85%		{opacity: 1;}
-	// 95%		{text-shadow:  0 0 90px #fff;}
 	100%	{  text-shadow: 0 0 0px #BBBBBB; opacity: 1 }
 }
 
@@ -177,6 +194,7 @@ console.log(this.posHighlight);
   margin-left: 3.5rem;
   background: #1D1D1D;
   padding: 0 .5rem;
+  z-index: 9;
 }
 
 .dateline {
@@ -207,14 +225,12 @@ console.log(this.posHighlight);
     border-top: 1px dotted #BBBBBB;
     height: 1px;
     width: 1rem;
-    // mtop: 3rem;
   }
   &--horizontalmiddle {
     @extend .authorbeginline;
     border-top: 1px dotted #636363;
     height: 1px;
     width: 1rem;
-    // mtop: 3rem;
   }
 }
 
@@ -234,5 +250,41 @@ console.log(this.posHighlight);
   height: 6rem;
   position: absolute;
   left: 2.5rem;
+}
+
+.linecontent {
+  display: flex;
+  width: 100%;
+  white-space: nowrap;
+    overflow-x: scroll;
+}
+
+.exportlinks {
+  width: 160px;
+  height: 6rem;
+  position: absolute;
+  background: linear-gradient(90deg, rgba(29,29,29,0) 0%, rgba(29,29,29,1) 35%, rgba(29,29,29,1) 100%);
+  right: 0;
+  align-items: center;
+  display: flex;
+}
+
+.context {
+  width: 2rem;
+  height: 2rem;
+  background-image: url("../assets/icons/context.svg");
+  background-size: cover;
+  margin-left: 4rem;
+}
+
+.watch {
+  width: 2rem;
+  height: 2rem;
+  background-image: url("../assets/icons/watch.svg");
+  margin-left: .5rem;
+  background-size: cover;
+}
+.firstline, .secondline {
+  // display: none;
 }
 </style>
