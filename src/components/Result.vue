@@ -34,7 +34,7 @@
       class="exportlinks"
       v-if="showScreenshot">
       <div class="context"></div>
-      <a :href="'https://www.youtube.com/watch?v=' + additionalmeta.id" target="_blank">
+      <a :href="'https://www.youtube.com/watch?v=' + additionalmeta.id + '&t=' + this.fixTimestamp(this.resultline._source.start)" target="_blank">
       <div class="watch"></div>
       </a>
 
@@ -60,6 +60,7 @@ export default {
       author: '',
       date: '',
       formattedDate: '',
+      timestamp: 0,
       mouseX: 0,
       showScreenshot: false,
       posHighlight: {},
@@ -77,8 +78,6 @@ export default {
     }
   },
   mounted: function() {
-    console.log('blabla')
-    console.log(this.additionalmeta.id);
     this.posHighlight = this.$refs.highlightedtext.getBoundingClientRect();
 
     this.author = this.additionalmeta.user;
@@ -98,6 +97,9 @@ export default {
     }
   },
   methods: {
+    fixTimestamp(stamp) {
+      return stamp.split(".")[0];
+    },
     loadAdditionalLines() {
 
       let vidid = this.resultline._id.slice(0,12);
