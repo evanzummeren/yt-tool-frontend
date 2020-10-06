@@ -94,11 +94,11 @@ body {
   margin-bottom: 10px;
 }
 
+/* Sprite */
 #sprite {
   width: 100%;
   top: 0;
   position: absolute;
   left: 0;
-  filter: grayscale(100%);
 }
 </style>

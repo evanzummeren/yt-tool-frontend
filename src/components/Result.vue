@@ -34,9 +34,9 @@
       class="exportlinks"
       v-if="showScreenshot">
       <div class="context"></div>
-      <a :href="'https://www.youtube.com/watch?v=' + additionalmeta.id + '&t=' + this.fixTimestamp(this.resultline._source.start)" target="_blank">
-      <div class="watch"></div>
-      </a>
+      <!-- <a :href="'https://www.youtube.com/watch?v=' + additionalmeta.id + '?t=' + this.fixTimestamp(this.resultline._source.start)" target="_blank"> -->
+      <div class="watch" @click="watchEmbed"></div>
+      <!-- </a> -->
 
     </div>
 
@@ -97,6 +97,9 @@ export default {
     }
   },
   methods: {
+    watchEmbed() {
+      this.$parent.triggerEmbed('https://www.youtube.com/embed/' + this.additionalmeta.id + '?start=' + this.fixTimestamp(this.resultline._source.start) + '&autoplay=1')
+    },
     fixTimestamp(stamp) {
       return stamp.split(".")[0];
     },
@@ -258,7 +261,7 @@ export default {
   display: flex;
   width: 100%;
   white-space: nowrap;
-    overflow-x: scroll;
+  overflow-x: scroll;
 }
 
 .exportlinks {

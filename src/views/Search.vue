@@ -24,6 +24,10 @@
       </div>
     </header>
 
+    <Embed 
+      :ytlink="embed.dataUrl"
+      v-if="embed.open" />
+
     <ul>
       <li v-for="(result, index) in results" v-bind:key="index">
         <Result 
@@ -41,6 +45,8 @@
 import Result from '../components/Result.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
+import Embed from '../components/Embed.vue'
+
 // import anime from 'animejs/lib/anime.es.js';
 const axios = require('axios');
 
@@ -53,10 +59,14 @@ import serverCredentials from '../mixins/server.json';
 export default {
   name: 'Home',
   components: {
-    Result, SearchMenu
+    Result, SearchMenu, Embed
   },
   data: function() {
     return {
+      embed: {
+        dataUrl: "",
+        open: false
+      },
       searchOptions: {
         categories: ['altright'],
         sort: "",
@@ -74,6 +84,14 @@ export default {
     this.processCall(this.$route.params.query);
   },
   methods: {
+    triggerEmbed(str) {
+      this.embed.dataUrl = str;
+      this.embed.open = true;
+    },
+    closeThisEmbed() {
+      this.embed.open = false;
+      console.log('alohaaa')
+    },
     openSearchMenu() {
       this.showSearchMenu = !this.showSearchMenu;
     },

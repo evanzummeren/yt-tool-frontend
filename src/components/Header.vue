@@ -6,6 +6,8 @@
       <div class="thirdcornerblock"></div>
       <div class="fourthcornerblock"></div>
       <div class="blackbar"></div>
+
+      <div class="coverup"></div>
       
       <div class="firstsingleline"></div>
       <div class="secondsingleline"></div>
@@ -56,6 +58,15 @@ export default {
   top: 0;
   height: 400px;
   width: 400px;
+}
+
+.coverup {
+  width: 400px;
+  height: 400px;
+  background: black;
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
 }
 
 .container__blocks {

@@ -52,8 +52,8 @@ export default {
 .shade {
   width: 100px;
   height: 56px;
-  background: rgba(79,35,255,1);
-  opacity: .5;
+  background: black;
+  opacity: .3;
   position: absolute;
   z-index: 10;
 }
