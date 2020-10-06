@@ -46,7 +46,6 @@ import Result from '../components/Result.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
 import Embed from '../components/Embed.vue'
-
 // import anime from 'animejs/lib/anime.es.js';
 const axios = require('axios');
 

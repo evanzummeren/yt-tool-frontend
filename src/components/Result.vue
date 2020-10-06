@@ -104,6 +104,7 @@ export default {
       return stamp.split(".")[0];
     },
     loadAdditionalLines() {
+      this.watchEmbed();
 
       let vidid = this.resultline._id.slice(0,12);
       let pos = this.resultline._id.slice(12,20);
@@ -159,6 +160,7 @@ export default {
   border-bottom: 1px dotted #2f2f2f;
   position: relative;
   text-align: center;
+  // cursor: pointer;
 }
 
 .blurtext {
@@ -262,6 +264,7 @@ export default {
   width: 100%;
   white-space: nowrap;
   overflow-x: scroll;
+  cursor: pointer;
 }
 
 .exportlinks {
