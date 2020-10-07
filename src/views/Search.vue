@@ -37,6 +37,7 @@
           :resultline="result"
           :preresult="results[index - 1]"
           :nextresult="results[index + 1]" />
+
       </li>
     </ul>
 
@@ -176,7 +177,8 @@ export default {
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
-        console.log('response coming in')
+        console.log('response coming in');
+        console.log(response)
         response.data.hits.hits.forEach(el => {
           _this.results.push(el)
         });

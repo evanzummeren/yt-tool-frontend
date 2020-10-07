@@ -48,11 +48,11 @@
 import moment from 'moment';
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
-
 import Screenshot from './Screenshot.vue'
 
 export default {
   name: 'Result',
+  // props: ['resultline', 'additionalmeta', 'nextresult'],
   props: ['resultline', 'additionalmeta', 'preresult', 'nextresult'],
   components: { Screenshot },
   data: function() {
@@ -84,17 +84,34 @@ export default {
     this.date = this.additionalmeta.date;
     this.formattedDate = moment(this.additionalmeta.date).format('LL');
 
-    if (this.date === this.preresult.inner_hits.video.hits.hits[0]._source.date) {
-      this.render.date = false
+    if(this.preresult === undefined) {
+      console.log('isss undefined')
+    } else {
+
+      if (this.additionalmeta.date === this.preresult.inner_hits.video.hits.hits[0]._source.date) {
+        this.render.date = false
+      }
+
+      if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user && this.author === this.preresult.inner_hits.video.hits.hits[0]._source.user) {
+        console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
+        this.render.author = false
+      }
+      
+      if (this.author !== this.nextresult.inner_hits.video.hits.hits[0]._source.user) {
+        console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
+        this.render.author = false
+      }
     }
 
-    if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user) {
-      this.render.author = false
-    }
+    
 
-    if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user && this.author !== this.preresult.inner_hits.video.hits.hits[0]._source.user) {
-      this.render.lastline = true
-    }
+
+
+    console.log(this.author)
+
+
+
+
   },
   methods: {
     watchEmbed() {
@@ -151,7 +168,6 @@ export default {
 
 <style lang="scss" scoped>
 .singleresult {
-  // height: 5rem;
   font-family: 'Flaco-mono';
   display: flex;
   color: #BBBBBB;
