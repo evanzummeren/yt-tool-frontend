@@ -10,12 +10,12 @@
       <div class="categories searchmenu__space">
         <h3>categories</h3>
         <div class="checkboxes">
-          <input type="checkbox" id="altright" value="altright" v-model="checkedCats"><label for="altright">alt-right</label><br/>
-          <input type="checkbox" id="althealth" value="althealth" v-model="checkedCats"><label for="althealth">alternative health</label><br/>
-          <input type="checkbox" id="breadtube" value="breadtube" v-model="checkedCats"><label for="breadtube">breadtube</label><br/>
-          <input type="checkbox" id="conspiracy" value="conspiracy" v-model="checkedCats"><label for="conspiracy">conspiracy</label><br/>
-          <input type="checkbox" id="qanon" value="qanon" v-model="checkedCats"><label for="qanon">qanon</label><br/>
-          <input type="checkbox" id="marxism" value="marxism" v-model="checkedCats"><label for="marxism">marxism</label>
+          <input type="checkbox" id="altright" value="altright" v-model="checkedCats" @change="changeCategories"><label for="altright">alt-right</label><br/>
+          <input type="checkbox" id="althealth" value="althealth" v-model="checkedCats" @change="changeCategories"><label for="althealth">alternative health</label><br/>
+          <input type="checkbox" id="breadtube" value="breadtube" v-model="checkedCats" @change="changeCategories"><label for="breadtube">breadtube</label><br/>
+          <input type="checkbox" id="conspiracy" value="conspiracy" v-model="checkedCats" @change="changeCategories"><label for="conspiracy">conspiracy</label><br/>
+          <input type="checkbox" id="qanon" value="qanon" v-model="checkedCats" @change="changeCategories"><label for="qanon">qanon</label><br/>
+          <input type="checkbox" id="marxism" value="marxism" v-model="checkedCats" @change="changeCategories"><label for="marxism">marxism</label>
         </div>
       </div>
       <div class="sort searchmenu__space">
@@ -49,13 +49,13 @@
       </div>
     </div>
 
-<div class="window">
+        <div class="window">
           <div
-        class="window__bar"
-        :ref="'single_' + index"
-        v-for="index in 120" 
-        :key="index">
-        <div class="window__barwhitefill"></div>
+            class="window__bar"
+            :ref="'single_' + index"
+            v-for="index in 120" 
+            :key="index">
+          <div class="window__barwhitefill"></div>
 
         </div>
       </div>
@@ -73,6 +73,7 @@ export default {
   components: {
     DatePicker
   },
+  props: ['checkedCategories'],
   data: function() {
     return {
       sort: 'newest',
@@ -82,6 +83,7 @@ export default {
     }
   },
   mounted: function() {
+    this.checkedCats = this.checkedCategories;
     anime({
       targets: '.window__bar',
       height: function() { return 500 + anime.random(0, 100); },
@@ -101,6 +103,9 @@ export default {
     this.animatePianoKeys(); 
   },
   methods: {
+    changeCategories: function() {
+      this.$parent.passCategories(this.checkedCats);
+    },
     selectSort: function(sortType) {
       this.sort = sortType;
     },

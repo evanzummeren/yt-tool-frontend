@@ -1,8 +1,10 @@
 <template>
   <div class="container">
 
-    <SearchMenu v-if="showSearchMenu"/>
-    <!-- <SearchMenu v-if="true"/> -->
+    <SearchMenu 
+      v-if="showSearchMenu"
+      :checkedCategories="searchOptions.categories"
+      />
 
     <header>
       <input 
@@ -10,7 +12,7 @@
         v-model="keyword" 
         v-on:keyup.enter="performSearch"
         placeholder="search">
-      <div class="categories" @click="openSearchMenu">qanon, breadtube</div>
+      <div class="categories" @click="openSearchMenu">categories</div>
       <div class="categories" @click="openSearchMenu">sort</div>
       <div class="categories" @click="openSearchMenu">filters [2]</div>
       <div class="verticalline--top"></div>
@@ -67,7 +69,7 @@ export default {
         open: false
       },
       searchOptions: {
-        categories: ['altright'],
+        categories: ['altright', 'althealth'],
         sort: "",
         filter: []
       },
@@ -80,7 +82,8 @@ export default {
   },
   mounted: function() {
     this.keyword = this.$route.params.query;
-    this.processCall(this.$route.params.query);
+    this.searchOptions.categories = this.$route.params.categories.split(",")
+    this.processCall(this.$route.params.query, this.searchOptions.categories);
   },
   methods: {
     triggerEmbed(str) {
@@ -89,17 +92,30 @@ export default {
     },
     closeThisEmbed() {
       this.embed.open = false;
-      console.log('alohaaa')
     },
     openSearchMenu() {
       this.showSearchMenu = !this.showSearchMenu;
     },
+    passCategories(arr) {
+      console.log(arr)
+      this.searchOptions.categories = arr;
+      console.log('new list');
+      console.log(this.searchOptions.categories)
+    },
     performSearch() {
       this.results = [];
       this.processCall(this.keyword);
-      this.$router.push(`../../../../search/q/${this.keyword}/cat/blabla`)
+      this.showSearchMenu = false;
+      console.log(this.searchOptions.categories);
+      console.log('search')
+      this.$router.push(`../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}`)
     },
-    processCall(str) {
+    stitchCategories() {
+      let str = this.searchOptions.categories.join(",");
+      return str;
+    },
+    processCall(str, cat) {
+      console.log('search cat ', cat);
       // var resp = this.generalCall(this.$route.params.query);
       // console.log(resp);
 
@@ -107,7 +123,7 @@ export default {
 
       console.log(str);
 
-      axios.post(serverCredentials.url, {
+      let query = {
         "size": 100,
         "from": 0,
         "sort" : [
@@ -137,8 +153,8 @@ export default {
                           }
                         },
                         {
-                          "match": {
-                            "category": "qanon"
+                          "terms": {
+                            "category": this.searchOptions.categories
                           }
                         }
                       ]
@@ -156,7 +172,9 @@ export default {
             "line" : {}
         }
     }
-      })
+      }
+
+      axios.post(serverCredentials.url, query)
       .then(function (response) {
         console.log('response coming in')
         response.data.hits.hits.forEach(el => {
@@ -234,8 +252,6 @@ input {
   color: black;
   padding-left: 3rem;
 }
-
-
 
 :-webkit-autofill { color: #fff !important; }
 

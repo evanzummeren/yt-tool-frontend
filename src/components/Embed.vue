@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .embed {
   position: fixed;
   bottom: 2rem;
