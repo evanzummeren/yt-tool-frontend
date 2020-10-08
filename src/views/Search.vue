@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-infinite-scroll="loadMore" infinite-scroll-disabled="infiniteScroll.busy" infinite-scroll-distance="10">
 
     <SearchMenu 
       v-if="showSearchMenu"
@@ -41,6 +41,17 @@
       </li>
     </ul>
 
+        <div class="statusbar">
+      <div class="statusbar__spinnercontainer">
+        <div class="spinner" v-if="infiniteScroll.busy">
+          <div class="spinner__insert"></div>
+        </div>
+      </div>
+      <div class="statusbar__textcontainer">
+        {{this.resultsMetadata.results}} results, showing 50
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -76,6 +87,14 @@ export default {
       },
       showSearchMenu: false,
       keyword: "",
+      infiniteScroll: {
+        busy: false,
+        size: 50,
+        pos: 0
+      },
+      resultsMetadata: {
+        results: 0
+      },
       results: []
     }
   },
@@ -87,6 +106,18 @@ export default {
     this.processCall(this.$route.params.query, this.searchOptions.categories);
   },
   methods: {
+    loadMore: function() {
+      this.infiniteScroll.busy = true;
+      this.infiniteScroll.pos + this.infiniteScroll.size;
+
+      var _this = this;
+
+      setTimeout(() => {
+        _this.processCall(_this.keyword, _this.searchOptions.categories)
+        console.log('blabla')
+        this.infiniteScroll.busy = false;
+      }, 1000);
+    },
     triggerEmbed(str) {
       this.embed.dataUrl = str;
       this.embed.open = true;
@@ -125,8 +156,8 @@ export default {
       console.log(str);
 
       let query = {
-        "size": 100,
-        "from": 0,
+        "size": this.infiniteScroll.size,
+        "from": this.infiniteScroll.pos,
         "sort" : [
           { "date" : {"order" : "desc"} },
           // "_score"
@@ -177,8 +208,9 @@ export default {
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
-        console.log('response coming in');
         console.log(response)
+
+        _this.resultsMetadata.results = response.data.hits.total;
         response.data.hits.hits.forEach(el => {
           _this.results.push(el)
         });
@@ -319,4 +351,55 @@ ul {
 
 
 }
+
+/* STATUS BAR */
+
+.statusbar {
+  width: 33vw;
+  line-height: 2rem;
+  border-top: 1px solid #8A8A8A;
+  // background: blue;
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  z-index: 10000;
+  background: linear-gradient(90deg, rgba(29,29,29,1) 0%, rgba(29,29,29,1) 33%, rgba(29,29,29,0) 100%);
+
+}
+
+.statusbar__spinnercontainer {
+  height: 1rem;
+  width: 1rem;
+  margin-left: 1.6rem;
+  margin-top: 0.4rem;
+}
+
+.statusbar__textcontainer {
+  margin-left: 1rem;
+  color: white;
+  font-family: 'Flaco';
+  font-size: .75rem;
+}
+
+.spinner {
+  // display: none;
+  background: conic-gradient(#C4C4C4, rgba(0,0,0,0));
+  height: 1rem;
+  width: 1rem;
+
+  border-radius: 100%;
+  animation:spin 4s linear infinite;
+}
+
+.spinner__insert {
+  margin-left: .2rem;
+  margin-top: .2rem;
+  position: absolute;
+  height: 0.6rem;
+  width: .6rem;
+  background: #1d1d1d;
+  border-radius: 100%;
+}
+
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 </style>

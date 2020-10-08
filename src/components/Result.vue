@@ -92,15 +92,15 @@ export default {
         this.render.date = false
       }
 
-      if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user && this.author === this.preresult.inner_hits.video.hits.hits[0]._source.user) {
-        console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
-        this.render.author = false
-      }
+      // if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user && this.author === this.preresult.inner_hits.video.hits.hits[0]._source.user) {
+      //   console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
+      //   this.render.author = false
+      // }
       
-      if (this.author !== this.nextresult.inner_hits.video.hits.hits[0]._source.user) {
-        console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
-        this.render.author = false
-      }
+      // if (this.author !== this.nextresult.inner_hits.video.hits.hits[0]._source.user) {
+      //   console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
+      //   this.render.author = false
+      // }
     }
 
     

@@ -1,11 +1,18 @@
 <template>
   <div id="app">
     <Header/>
-    <div id="nav">
-      <router-link to="/search/q/keyword/cat/all">Search</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
+
+    <div class="footer__menu">
+      <ul class="sidenav">
+        <router-link to="/search/q/epstein/cat/qanon"><li class="diamond--active">Video search</li></router-link>
+        <li class="diamond">Comments</li>
+        <li class="diamond">Notifications</li>
+      </ul>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -63,6 +70,16 @@ body {
   background: linear-gradient(180deg, rgba(29,29,29,0) 45%, rgba(79,35,255,1) 45%, rgba(79,35,255,1) 70%, rgba(29,29,29,0) 70%);
 }
 
+.footer {
+  position: fixed;
+  width: 200px;
+  height: 2rem;
+  bottom: 0;
+  left: 0;
+  background: blue;
+  z-index: 100;
+}
+
 /* Date picker */
 .vc-border-gray-700 {
   border-color: #4f23ff !important;
@@ -101,4 +118,39 @@ body {
   position: absolute;
   left: 0;
 }
+
+.footer__menu {
+  position: fixed;
+  left: calc(2rem + 1px);
+  bottom: calc(2rem + 1px);
+  height: 200px;
+  width: 200px;
+  background: linear-gradient(192deg, rgba(29,29,29,0) 0%, rgba(29,29,29,1) 81%, rgba(29,29,29,1) 100%);
+  z-index: 1000;
+}
+
+.sidenav {
+  list-style-type: none;
+  padding-left: 0px;
+  margin-left: -8px;
+  margin-top: 80px;
+}
+
+.diamond {
+  background-image: url("./assets/icons/diamond.svg");
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  line-height: 1rem;
+  padding-left: 2rem;
+  margin-bottom: .5rem;
+  font-family: 'Flaco';
+  color: #9E9E9E;
+  text-decoration: none;
+    &--active {
+    @extend .diamond;
+    background-image: url("./assets/icons/diamond_active.svg");
+    color: white;
+  } 
+}
+
 </style>
