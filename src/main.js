@@ -6,6 +6,8 @@ var infiniteScroll =  require('vue-infinite-scroll');
 
 Vue.config.productionTip = false
 
+export const bus = new Vue()
+
 Vue.use(VueSpriteAnimator)
 Vue.use(infiniteScroll)
 

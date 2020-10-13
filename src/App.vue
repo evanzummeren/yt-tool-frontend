@@ -5,8 +5,10 @@
 
     <div class="footer__menu">
       <ul class="sidenav">
-        <router-link to="/search/q/epstein/cat/qanon"><li class="diamond--active">Video search</li></router-link>
-        <li class="diamond">Comments</li>
+        <router-link to="/search/q/epstein/cat/qanon"><li class="diamond--active" @click="switchActive('search')">Video search</li></router-link>
+          <li v-bind:class="{ inset: !text, 'inset--active': text }" v-if="currentActive === 'search'" @click="triggerText()">Text</li>
+          <li v-bind:class="{ inset: !vis, 'inset--active': vis }" v-if="currentActive === 'search'" @click="triggerVis()">Visualisation</li>
+        <li class="diamond" @click="switchActive('comments')">Comments</li>
         <li class="diamond">Notifications</li>
       </ul>
     </div>
@@ -18,10 +20,37 @@
 
 <script>
 import Header from './components/Header.vue'
+import {bus} from './main.js'
 
 export default {
   name: 'App',
-  components: {Header}
+  components: {Header},
+  data: function() {
+    return {
+      currentActive: "search",
+      text: true,
+      vis: false,
+      insetActive: "text"
+    }
+  },
+  methods: {
+    triggerText: function() {
+      this.text = true;
+      this.vis = false;
+      bus.$emit('triggerSwitch', 'text')
+
+    },
+    triggerVis: function() {
+      this.text = false;
+      this.vis = true;
+      bus.$emit('triggerSwitch', 'vis')
+      console.log('trigger')
+    },
+    switchActive: function (str) {
+      this.currentActive = str;
+      console.log(str)
+    }
+  }
 }
 </script>
 
@@ -123,7 +152,7 @@ body {
   position: fixed;
   left: calc(2rem + 1px);
   bottom: calc(2rem + 1px);
-  height: 200px;
+  height: 240px;
   width: 200px;
   background: linear-gradient(192deg, rgba(29,29,29,0) 0%, rgba(29,29,29,1) 81%, rgba(29,29,29,1) 100%);
   z-index: 1000;
@@ -151,6 +180,21 @@ body {
     background-image: url("./assets/icons/diamond_active.svg");
     color: white;
   } 
+}
+
+.inset {
+  font-size: .9rem;
+  line-height: 1rem;
+  padding-left: 3rem;
+  margin-bottom: .5rem;
+  font-family: 'Flaco';
+  cursor: pointer;
+  color: #9E9E9E;
+  text-decoration: none;
+    &--active {
+      @extend .inset;
+      color: white !important;
+    }
 }
 
 </style>

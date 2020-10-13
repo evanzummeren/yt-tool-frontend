@@ -283,6 +283,12 @@ export default {
   cursor: pointer;
 }
 
+.linecontent::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
 .exportlinks {
   width: 160px;
   height: 6rem;

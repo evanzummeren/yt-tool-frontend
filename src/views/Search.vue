@@ -1,5 +1,6 @@
 <template>
   <div class="container" v-infinite-scroll="loadMore" infinite-scroll-disabled="infiniteScroll.busy" infinite-scroll-distance="10">
+    <Ngram />
 
     <SearchMenu 
       v-if="showSearchMenu"
@@ -26,6 +27,8 @@
       </div>
     </header>
 
+    <Datavis v-if="view === 'datavis'" />
+
     <Embed 
       :ytlink="embed.dataUrl"
       v-if="embed.open" />
@@ -33,7 +36,7 @@
     <ul>
       <li v-for="(result, index) in results" v-bind:key="index">
         <Result 
-          :additionalmeta="result.inner_hits.video.hits.hits[0]._source"
+          :additionalmeta="result._source"
           :resultline="result"
           :preresult="results[index - 1]"
           :nextresult="results[index + 1]" />
@@ -41,7 +44,7 @@
       </li>
     </ul>
 
-        <div class="statusbar">
+    <div class="statusbar">
       <div class="statusbar__spinnercontainer">
         <div class="spinner" v-if="infiniteScroll.busy">
           <div class="spinner__insert"></div>
@@ -60,8 +63,12 @@ import Result from '../components/Result.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
 import Embed from '../components/Embed.vue'
+import Ngram from '../components/Ngram.vue'
+import Datavis from '../components/Datavis.vue'
 // import anime from 'animejs/lib/anime.es.js';
 const axios = require('axios');
+
+import {bus} from '../main.js'
 
 import serverCredentials from '../mixins/server.json';
 // @ is an alias to /src
@@ -72,10 +79,11 @@ import serverCredentials from '../mixins/server.json';
 export default {
   name: 'Home',
   components: {
-    Result, SearchMenu, Embed
+    Result, SearchMenu, Embed, Datavis, Ngram
   },
   data: function() {
     return {
+      view: "text",
       embed: {
         dataUrl: "",
         open: false
@@ -95,7 +103,10 @@ export default {
       resultsMetadata: {
         results: 0
       },
-      results: []
+      results: [],
+      aggs: {
+        frequency: {}
+      }
     }
   },
   beforeCreate: function() {
@@ -104,19 +115,27 @@ export default {
     this.keyword = this.$route.params.query;
     this.searchOptions.categories = this.$route.params.categories.split(",")
     this.processCall(this.$route.params.query, this.searchOptions.categories);
+
+    bus.$on('triggerSwitch', this.switchView)
+
   },
   methods: {
+    switchView: function(type) {
+      this.view = type;
+
+      console.log(type)
+    },
     loadMore: function() {
       this.infiniteScroll.busy = true;
       this.infiniteScroll.pos + this.infiniteScroll.size;
 
-      var _this = this;
+      // var _this = this;
 
-      setTimeout(() => {
-        _this.processCall(_this.keyword, _this.searchOptions.categories)
-        console.log('blabla')
-        this.infiniteScroll.busy = false;
-      }, 1000);
+      // setTimeout(() => {
+      //   _this.processCall(_this.keyword, _this.searchOptions.categories)
+      //   console.log('blabla')
+      //   this.infiniteScroll.busy = false;
+      // }, 1000);
     },
     triggerEmbed(str) {
       this.embed.dataUrl = str;
@@ -163,38 +182,22 @@ export default {
           // "_score"
         ],
         "query": {
-          "bool": {
-            "must": [
-              {
-                "simple_query_string": {
-                  "fields": ["line"],
-                  "query": `${str}`
-                  // "fuzziness": "AUTO"
-                }
-              },
-              {
-                "has_parent": {
-                  "parent_type": "video",
-                  "inner_hits": {},
-                  "query": {
-                    "bool": {
-                      "must": [
-                        {
-                          "match": {
-                            "online": false
-                          }
-                        },
-                        {
-                          "terms": {
-                            "category": this.searchOptions.categories
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            ]
+          "term": {
+            "line": `${str}`
+          }
+        },
+        "aggs": {
+          "channels": {
+            "terms": {
+              "field": "user",
+              "size": 40
+            }
+          },
+          "mentions_over_time": {
+            "date_histogram": {
+              "field": "date",
+              "interval": "month"
+            }
           }
         },
         "highlight" : {
@@ -202,16 +205,19 @@ export default {
           "post_tags" : ["</span>"],
           "fields" : {
             "line" : {}
+          }
         }
-    }
       }
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
         console.log(response)
 
+
+
         _this.resultsMetadata.results = response.data.hits.total;
         response.data.hits.hits.forEach(el => {
+          console.log(el)
           _this.results.push(el)
         });
       })
