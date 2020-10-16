@@ -13,8 +13,6 @@
       </ul>
     </div>
 
-
-
   </div>
 </template>
 
@@ -35,16 +33,16 @@ export default {
   },
   methods: {
     triggerText: function() {
+      // Needs refactoring
       this.text = true;
       this.vis = false;
       bus.$emit('triggerSwitch', 'text')
-
     },
     triggerVis: function() {
+      // Needs refactoring
       this.text = false;
       this.vis = true;
-      bus.$emit('triggerSwitch', 'vis')
-      console.log('trigger')
+      bus.$emit('triggerSwitch', 'datavis')
     },
     switchActive: function (str) {
       this.currentActive = str;

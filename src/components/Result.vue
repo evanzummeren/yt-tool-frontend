@@ -52,7 +52,6 @@ import Screenshot from './Screenshot.vue'
 
 export default {
   name: 'Result',
-  // props: ['resultline', 'additionalmeta', 'nextresult'],
   props: ['resultline', 'additionalmeta', 'preresult', 'nextresult'],
   components: { Screenshot },
   data: function() {
@@ -78,17 +77,23 @@ export default {
     }
   },
   mounted: function() {
+    console.log('additional metadata')
+    console.log(this.additionalmeta);
     this.posHighlight = this.$refs.highlightedtext.getBoundingClientRect();
 
     this.author = this.additionalmeta.user;
     this.date = this.additionalmeta.date;
-    this.formattedDate = moment(this.additionalmeta.date).format('LL');
+
+    let utcSeconds = this.additionalmeta.date*1000;
+    this.formattedDate = moment(new Date(utcSeconds)).format('LL');
+
+    console.log(this.preresult);
 
     if(this.preresult === undefined) {
-      console.log('isss undefined')
+      console.log('is undefined')
     } else {
 
-      if (this.additionalmeta.date === this.preresult.inner_hits.video.hits.hits[0]._source.date) {
+      if (this.additionalmeta.date === this.preresult._source.date) {
         this.render.date = false
       }
 
@@ -103,19 +108,11 @@ export default {
       // }
     }
 
-    
-
-
-
     console.log(this.author)
-
-
-
-
   },
   methods: {
     watchEmbed() {
-      this.$parent.triggerEmbed('https://www.youtube.com/embed/' + this.additionalmeta.id + '?start=' + this.fixTimestamp(this.resultline._source.start) + '&autoplay=1')
+      this.$parent.triggerEmbed('https://www.youtube.com/embed/' + this.additionalmeta.vid_id + '?start=' + this.fixTimestamp(this.resultline._source.start) + '&autoplay=1')
     },
     fixTimestamp(stamp) {
       return stamp.split(".")[0];
@@ -144,8 +141,8 @@ export default {
       })
       .then(function (response) {
         _this.text.blur = false;
-        _this.text.prevLine = response.data.hits.hits[0]._source.line;
-        _this.text.nextLine = response.data.hits.hits[1]._source.line;
+        _this.text.prevLine = response.data._source.line;
+        _this.text.nextLine = response.data._source.line;
       })
       .catch(function (error) {
         console.log(error);

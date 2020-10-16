@@ -1,11 +1,10 @@
 <template>
   <div class="container" v-infinite-scroll="loadMore" infinite-scroll-disabled="infiniteScroll.busy" infinite-scroll-distance="10">
-    <Ngram />
+    <Ngram v-if="view === 'text'" />
 
     <SearchMenu 
       v-if="showSearchMenu"
-      :checkedCategories="searchOptions.categories"
-      />
+      :checkedCategories="searchOptions.categories" />
 
     <header>
       <input 
@@ -27,13 +26,15 @@
       </div>
     </header>
 
-    <Datavis v-if="view === 'datavis'" />
+    <Datavis 
+      :aggs="aggsResults"
+      v-if="view === 'datavis'" />
 
     <Embed 
       :ytlink="embed.dataUrl"
-      v-if="embed.open" />
+      v-if="embed.open && view === 'text'" />
 
-    <ul>
+    <ul v-if="view === 'text'">
       <li v-for="(result, index) in results" v-bind:key="index">
         <Result 
           :additionalmeta="result._source"
@@ -44,7 +45,7 @@
       </li>
     </ul>
 
-    <div class="statusbar">
+    <div class="statusbar" v-if="view === 'text'">
       <div class="statusbar__spinnercontainer">
         <div class="spinner" v-if="infiniteScroll.busy">
           <div class="spinner__insert"></div>
@@ -104,9 +105,7 @@ export default {
         results: 0
       },
       results: [],
-      aggs: {
-        frequency: {}
-      }
+      aggsResults: {}
     }
   },
   beforeCreate: function() {
@@ -114,7 +113,7 @@ export default {
   mounted: function() {
     this.keyword = this.$route.params.query;
     this.searchOptions.categories = this.$route.params.categories.split(",")
-    this.processCall(this.$route.params.query, this.searchOptions.categories);
+    this.formQuery(this.$route.params.query, this.searchOptions.categories, false);
 
     bus.$on('triggerSwitch', this.switchView)
 
@@ -123,8 +122,13 @@ export default {
     switchView: function(type) {
       this.view = type;
 
+      if (type === 'datavis') {
+        this.formQuery(this.$route.params.query, this.searchOptions.categories, true);
+      }
+
       console.log(type)
     },
+
     loadMore: function() {
       this.infiniteScroll.busy = true;
       this.infiniteScroll.pos + this.infiniteScroll.size;
@@ -155,7 +159,7 @@ export default {
     },
     performSearch() {
       this.results = [];
-      this.processCall(this.keyword);
+      this.formQuery(this.keyword, this.searchOptions.categories, false);
       this.showSearchMenu = false;
       console.log(this.searchOptions.categories);
       console.log('search')
@@ -165,14 +169,45 @@ export default {
       let str = this.searchOptions.categories.join(",");
       return str;
     },
-    processCall(str, cat) {
+    formQuery(str, cat, agg) {
       console.log('search cat ', cat);
-      // var resp = this.generalCall(this.$route.params.query);
-      // console.log(resp);
 
-      var _this = this;
+      let aggSettings = {};
+      let highlightSettings = {};
 
-      console.log(str);
+      if (agg === true) {
+        aggSettings = {
+          "channels": {
+            "terms": {
+              "field": "user",
+              "size": 50
+            }
+          },
+          "mentions_over_time": {
+            "date_histogram": {
+              "field": "date",
+              "interval": "month"
+            }
+          }
+        }
+      } else if (agg === false) {
+        aggSettings = {
+          "mentions_over_time": {
+            "date_histogram": {
+              "field": "date",
+              "interval": "month"
+            }
+          }
+        }
+
+        highlightSettings = {
+          "pre_tags" : ["<span class='hit'>"],
+          "post_tags" : ["</span>"],
+          "fields" : {
+            "line" : {}
+          }
+        }
+      }
 
       let query = {
         "size": this.infiniteScroll.size,
@@ -186,45 +221,37 @@ export default {
             "line": `${str}`
           }
         },
-        "aggs": {
-          "channels": {
-            "terms": {
-              "field": "user",
-              "size": 40
-            }
-          },
-          "mentions_over_time": {
-            "date_histogram": {
-              "field": "date",
-              "interval": "month"
-            }
-          }
-        },
-        "highlight" : {
-          "pre_tags" : ["<span class='hit'>"],
-          "post_tags" : ["</span>"],
-          "fields" : {
-            "line" : {}
-          }
-        }
+        "aggs": aggSettings,
+        "highlight" : highlightSettings
       }
+
+      if (agg === true) {
+        this.processCall(query, true);
+      } else {
+        this.processCall(query, false);
+
+      }
+    },
+    processCall(query, agg) {
+      var _this = this;
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
-        console.log(response)
+        // console.log(response)
 
-
-
-        _this.resultsMetadata.results = response.data.hits.total;
-        response.data.hits.hits.forEach(el => {
-          console.log(el)
-          _this.results.push(el)
-        });
+        if ( agg === false ) {
+          _this.resultsMetadata.results = response.data.hits.total;
+          response.data.hits.hits.forEach( el => {
+            // console.log(el)
+            _this.results.push( el )
+          });
+        } else if ( agg === true ) {
+          _this.aggsResults = response.data.aggregations;
+        }
       })
-      .catch(function (error) {
+      .catch( function (error) {
         console.log(error);
       });
-    
     }
   }
 }
