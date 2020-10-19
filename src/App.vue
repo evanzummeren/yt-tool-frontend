@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Header/>
+    <Sidemenu v-if="sidemenu" />
     <router-view/>
 
     <div class="footer__menu">
@@ -17,18 +18,20 @@
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import Header from './components/Header.vue';
+import Sidemenu from './components/Sidemenu.vue';
 import {bus} from './main.js'
 
 export default {
   name: 'App',
-  components: {Header},
+  components: {Header, Sidemenu},
   data: function() {
     return {
       currentActive: "search",
       text: true,
       vis: false,
-      insetActive: "text"
+      insetActive: "text",
+      sidemenu: true
     }
   },
   methods: {
@@ -55,6 +58,10 @@ export default {
 <style lang="scss">
 * {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
 }
 
 #app {
