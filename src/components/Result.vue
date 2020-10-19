@@ -10,7 +10,9 @@
     <div class="dateline"></div>
     <div class="horizontalline" v-if="render.date"></div>
     <span class="date" v-if="render.date">{{this.formattedDate}}</span>
-    <span class="user" v-if="render.author">{{author}}</span>
+    <span class="user" v-if="render.author"><span v-bind:class="{ 'circle online': online, 'circle offline': !online }"></span>
+      <span v-if="!showScreenshot">{{author}}</span><span v-if="showScreenshot">{{cat}} – {{views}}</span>
+    </span>
 
     <div class="authorbeginline" v-if="render.author"></div>
     <div class="authorbeginline--horizontal" v-if="render.author"></div>
@@ -26,9 +28,9 @@
       <span v-bind:class="{ 'blurtext secondline': text.blur, 'unblurredtext secondline': !text.blur }">{{text.nextLine}}</span>
     </div>
 
-    <Screenshot 
+    <!-- <Screenshot 
       :mouseX="mouseX"
-      v-if="showScreenshot" />
+      v-if="showScreenshot" /> -->
 
     <div 
       class="exportlinks"
@@ -48,16 +50,20 @@
 import moment from 'moment';
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
-import Screenshot from './Screenshot.vue'
+// import Screenshot from './Screenshot.vue'
+
 
 export default {
   name: 'Result',
   props: ['resultline', 'additionalmeta', 'preresult', 'nextresult'],
-  components: { Screenshot },
+  // components: { Screenshot },
   data: function() {
     return {
       author: '',
       date: '',
+      views: 0,
+      cat: '',
+      online: true,
       formattedDate: '',
       timestamp: 0,
       mouseX: 0,
@@ -82,6 +88,9 @@ export default {
     this.posHighlight = this.$refs.highlightedtext.getBoundingClientRect();
 
     this.author = this.additionalmeta.user;
+    this.cat = this.additionalmeta.category;
+    this.views = this.additionalmeta.views;
+    this.online = this.additionalmeta.online;
     this.date = this.additionalmeta.date;
 
     let utcSeconds = this.additionalmeta.date*1000;
@@ -140,9 +149,10 @@ export default {
         }
       })
       .then(function (response) {
+        console.log(response);
         _this.text.blur = false;
-        _this.text.prevLine = response.data._source.line;
-        _this.text.nextLine = response.data._source.line;
+        _this.text.prevLine = response.data.hits.hits[0]._source.line;
+        _this.text.nextLine = response.data.hits.hits[1]._source.line;
       })
       .catch(function (error) {
         console.log(error);
@@ -173,7 +183,15 @@ export default {
   border-bottom: 1px dotted #2f2f2f;
   position: relative;
   text-align: center;
-  // cursor: pointer;
+  cursor: pointer;
+}
+
+.singleresult:hover {
+  background: #313131;
+}
+
+.singleresult:hover > .user {
+  background: #313131;
 }
 
 .blurtext {
@@ -313,5 +331,21 @@ export default {
 }
 .firstline, .secondline {
   // display: none;
+}
+
+.circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.online {
+  background: #91ffb4;
+}
+
+.offline {
+  background: #ff9292;
 }
 </style>

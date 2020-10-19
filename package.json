@@ -10,12 +10,14 @@
   "dependencies": {
     "animejs": "^3.2.0",
     "axios": "^0.20.0",
+    "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "moment": "^2.29.0",
     "pixi.js": "^5.3.3",
     "simple-linear-scale": "^1.0.1",
     "v-calendar": "^1.0.8",
     "vue": "^2.6.11",
+    "vue-chartjs": "^3.5.1",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.2.0",
     "vue-sprite-animator": "^1.0.1"

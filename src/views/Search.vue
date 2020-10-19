@@ -4,7 +4,8 @@
 
     <SearchMenu 
       v-if="showSearchMenu"
-      :checkedCategories="searchOptions.categories" />
+      :checkedCategories="searchOptions.categories"
+      :checkedOnlineOffline="searchOptions.online" />
 
     <header>
       <input 
@@ -14,7 +15,7 @@
         placeholder="search">
       <div class="categories" @click="openSearchMenu">categories</div>
       <div class="categories" @click="openSearchMenu">sort</div>
-      <div class="categories" @click="openSearchMenu">filters [2]</div>
+      <div class="categories" @click="openSearchMenu">filters</div>
       <div class="verticalline--top"></div>
       <div class="verticalline--header"></div>
       <div class="menu">
@@ -91,7 +92,8 @@ export default {
       },
       searchOptions: {
         categories: ['altright', 'althealth'],
-        sort: "",
+        sort: "desc",
+        online: [true, false],
         filter: []
       },
       showSearchMenu: false,
@@ -108,15 +110,12 @@ export default {
       aggsResults: {}
     }
   },
-  beforeCreate: function() {
-  },
   mounted: function() {
     this.keyword = this.$route.params.query;
     this.searchOptions.categories = this.$route.params.categories.split(",")
     this.formQuery(this.$route.params.query, this.searchOptions.categories, false);
 
     bus.$on('triggerSwitch', this.switchView)
-
   },
   methods: {
     switchView: function(type) {
@@ -131,15 +130,14 @@ export default {
 
     loadMore: function() {
       this.infiniteScroll.busy = true;
-      this.infiniteScroll.pos + this.infiniteScroll.size;
+      this.infiniteScroll.pos = this.infiniteScroll.pos + this.infiniteScroll.size;
 
-      // var _this = this;
+      var _this = this;
 
-      // setTimeout(() => {
-      //   _this.processCall(_this.keyword, _this.searchOptions.categories)
-      //   console.log('blabla')
-      //   this.infiniteScroll.busy = false;
-      // }, 1000);
+      setTimeout(() => {
+        _this.formQuery(_this.keyword, _this.searchOptions.categories, false)
+        this.infiniteScroll.busy = false;
+      }, 1000);
     },
     triggerEmbed(str) {
       this.embed.dataUrl = str;
@@ -152,17 +150,18 @@ export default {
       this.showSearchMenu = !this.showSearchMenu;
     },
     passCategories(arr) {
-      console.log(arr)
       this.searchOptions.categories = arr;
-      console.log('new list');
-      console.log(this.searchOptions.categories)
     },
+    passOnline(arr) { this.searchOptions.online = arr; },
+    passSort(type) { 
+      console.log(type);
+      this.searchOptions.sort = type },
     performSearch() {
       this.results = [];
+      this.infiniteScroll.pos = 0;
       this.formQuery(this.keyword, this.searchOptions.categories, false);
       this.showSearchMenu = false;
       console.log(this.searchOptions.categories);
-      console.log('search')
       this.$router.push(`../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}`)
     },
     stitchCategories() {
@@ -175,12 +174,24 @@ export default {
       let aggSettings = {};
       let highlightSettings = {};
 
-      if (agg === true) {
+      if (agg === true) { // generate channel agg
         aggSettings = {
           "channels": {
             "terms": {
               "field": "user",
               "size": 50
+            }
+          },
+          "categories": {
+            "terms": {
+              "field": "category",
+              "size": 10
+            }
+          },
+          "removed": {
+            "terms": {
+              "field": "online",
+              "size": 2
             }
           },
           "mentions_over_time": {
@@ -213,14 +224,24 @@ export default {
         "size": this.infiniteScroll.size,
         "from": this.infiniteScroll.pos,
         "sort" : [
-          { "date" : {"order" : "desc"} },
+          { "date" : { "order" : this.searchOptions.sort } },
           // "_score"
         ],
         "query": {
-          "term": {
-            "line": `${str}`
-          }
-        },
+          "bool": {
+            "must": [ {
+              "query_string": {
+                "query": `${str}`,
+                "default_field": "line" 
+                }
+              }, {
+                "terms": { "online": this.searchOptions.online } 
+              }, {
+                "terms": { "category": this.searchOptions.categories }
+              }
+
+            ]
+        }},
         "aggs": aggSettings,
         "highlight" : highlightSettings
       }
@@ -237,7 +258,7 @@ export default {
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
-        // console.log(response)
+        console.log(response)
 
         if ( agg === false ) {
           _this.resultsMetadata.results = response.data.hits.total;
@@ -247,6 +268,7 @@ export default {
           });
         } else if ( agg === true ) {
           _this.aggsResults = response.data.aggregations;
+          console.log(_this.aggsResults);
         }
       })
       .catch( function (error) {

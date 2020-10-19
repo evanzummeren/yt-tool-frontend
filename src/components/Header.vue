@@ -44,7 +44,6 @@ export default {
       videoController.loop = true;
       videoController.autoplay = true;
       videoSprite.width = app.screen.width;
-      // videoSprite.height = 400;
 
       container.addChild(videoSprite);
   }

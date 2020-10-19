@@ -4,6 +4,16 @@
     <div class="container">
       <div class="info">
         <h3>Channel frequency</h3>
+        <p v-for="(result, index) in aggs.categories.buckets"
+          v-bind:key="index"
+          class="tempstyling"
+        >{{result.key}} – {{result.doc_count}} mentions</p>
+
+        <h3>Online</h3>
+        <p v-for="(result, index) in aggs.removed.buckets"
+          v-bind:key="index"
+          class="tempstyling"
+        >{{result.key_as_string}} – {{result.doc_count}}</p>
       </div>
       <div class="graph">
         <div class="graph__container">
@@ -28,6 +38,7 @@
 
 <script>
 import linearScale from 'simple-linear-scale';
+
 
 export default {
   name: "datavis",
@@ -112,5 +123,11 @@ h3 {
   color: white;
   width: 11rem;
   opacity: .1;
+}
+
+.tempstyling {
+  color: white;
+    font-family: 'Flaco';
+  font-size: 1rem;
 }
 </style>

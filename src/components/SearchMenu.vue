@@ -17,14 +17,16 @@
           <input type="checkbox" id="qanon" value="qanon" v-model="checkedCats" @change="changeCategories"><label for="qanon">qanon</label><br/>
           <input type="checkbox" id="marxism" value="marxism" v-model="checkedCats" @change="changeCategories"><label for="marxism">marxism</label>
         </div>
+
+        <h4 class="subheading">or search specific channels</h4>
       </div>
       <div class="sort searchmenu__space">
         <h3>sort</h3>
-        <ul>
-          <li v-bind:class="{ on: sort === 'newest' }" @click="selectSort('newest')">newest</li>
-          <li v-bind:class="{ on: sort === 'oldest' }" @click="selectSort('oldest')">oldest</li>
-          <li v-bind:class="{ on: sort === 'mostpopular' }" @click="selectSort('mostpopular')">most popular</li>
-          <li v-bind:class="{ on: sort === 'mostrelevant' }" @click="selectSort('mostrelevant')">most relevant</li>
+        <ul class="sortcontainer">
+          <li v-bind:class="{ on: sort === 'desc' }" @click="selectSort('desc')">newest</li>
+          <li v-bind:class="{ on: sort === 'asc' }" @click="selectSort('asc')">oldest</li>
+          <!-- <li v-bind:class="{ on: sort === 'mostpopular' }" @click="selectSort('mostpopular')">most popular</li> -->
+          <!-- <li v-bind:class="{ on: sort === 'mostrelevant' }" @click="selectSort('mostrelevant')">most relevant</li> -->
         </ul>
       </div>
       <div class="filter searchmenu__space">
@@ -43,8 +45,13 @@
                 :value="null"
                 color="purple"
                 is-dark />
-          <li>specific channel</li>
-          <li>popularity</li>
+          <br/>
+          <li>show removed videos</li>
+          <div class="checkboxes">
+            <input type="checkbox" id="true" value="true" v-model="checkedOnline" @change="changeOnline"><label for="true">available videos</label><br/>
+            <input type="checkbox" id="false" value="false" v-model="checkedOnline" @change="changeOnline"><label for="false">removed videos</label>
+          </div>
+
         </ul>
       </div>
     </div>
@@ -73,17 +80,19 @@ export default {
   components: {
     DatePicker
   },
-  props: ['checkedCategories'],
+  props: ['checkedCategories', 'checkedOnlineOffline'],
   data: function() {
     return {
-      sort: 'newest',
+      sort: 'desc',
       selectedFirstDate: new Date(2005, 1, 14),
       selectedSecondDate: new Date(),
-      checkedCats: []
+      checkedCats: [],
+      checkedOnline: []
     }
   },
   mounted: function() {
     this.checkedCats = this.checkedCategories;
+    this.checkedOnline = this.checkedOnlineOffline;
     anime({
       targets: '.window__bar',
       height: function() { return 500 + anime.random(0, 100); },
@@ -106,8 +115,14 @@ export default {
     changeCategories: function() {
       this.$parent.passCategories(this.checkedCats);
     },
+    changeOnline: function() {
+      this.$parent.passOnline(this.checkedOnline);
+
+      console.log('blablalba')
+    },
     selectSort: function(sortType) {
       this.sort = sortType;
+      this.$parent.passSort(sortType)
     },
     animatePianoKeys() {
       anime({
@@ -147,17 +162,24 @@ ul {
   margin: 0;
   padding: 0;
   list-style-type: none;
-  font-family: 'Flaco';
-  font-size: 1rem;
+  // cursor: pointer;
 }
 
-li {
-  margin-top: .3rem;
-  color: #B2B2B2;
+.sortcontainer li {
   cursor: pointer;
 }
 
+li, .subheading {
+  font-family: 'Flaco';
+  font-size: 1rem;
+  margin-top: .3rem;
+  color: #B2B2B2;
+  font-weight: 100;
+}
 
+.subheading {
+  margin-top: 1rem;
+}
 
 .checkboxes {
   margin-top: 36px;
