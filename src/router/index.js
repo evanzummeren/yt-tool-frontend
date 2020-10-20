@@ -12,7 +12,7 @@ const routes = [
   //   component: Home
   // },
   {
-    path: '/search/q/:query/cat/:categories',
+    path: '/search/q/:query/cat/:categories/sort/:sort',
     // path: '/q/:query/c/:categories',
     name: 'Search',
     component: Search

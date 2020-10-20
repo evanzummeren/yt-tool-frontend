@@ -80,10 +80,10 @@ export default {
   components: {
     DatePicker
   },
-  props: ['checkedCategories', 'checkedOnlineOffline'],
+  props: ['checkedCategories', 'checkedOnlineOffline', 'incomingSort'],
   data: function() {
     return {
-      sort: 'desc',
+      sort: this.incomingSort,
       selectedFirstDate: new Date(2005, 1, 14),
       selectedSecondDate: new Date(),
       checkedCats: [],
@@ -91,6 +91,8 @@ export default {
     }
   },
   mounted: function() {
+    console.log('blablkdaskjfdasjk')
+    console.log(this.incomingSort)
     this.checkedCats = this.checkedCategories;
     this.checkedOnline = this.checkedOnlineOffline;
     anime({
