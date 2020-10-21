@@ -1,6 +1,6 @@
 <template>
   <div class="searchmenu">
-    <div class="container">
+    <div class="container__searchmenu">
       <div class="search searchmenu__space">
         <h3>search operators</h3>
         <ul>
@@ -91,8 +91,6 @@ export default {
     }
   },
   mounted: function() {
-    console.log('blablkdaskjfdasjk')
-    console.log(this.incomingSort)
     this.checkedCats = this.checkedCategories;
     this.checkedOnline = this.checkedOnlineOffline;
     anime({
@@ -253,10 +251,8 @@ h3 {
   font-size: 1.25rem;
 }
 
-.container {
-  /* width: 100px; */
+.container__searchmenu {
   height: 500px;
-  /* background: orange; */
   display: flex;
 }
 

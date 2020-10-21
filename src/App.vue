@@ -3,8 +3,8 @@
     <Header/>
     <Sidemenu 
       v-if="sidemenu" 
+      @switch="switchActive"
       @close="closeSidemenu" />
-
 
       <div class="verticalline--top"></div>
       <div class="verticalline--header"></div>
@@ -16,12 +16,14 @@
         </svg>
       </div>
 
-
     <router-view/>
 
     <div class="footer__menu">
       <ul class="sidenav">
-        <router-link to="/search/q/epstein/cat/qanon"><li class="diamond--active" @click="switchActive('search')">Video search</li></router-link>
+        <router-link to="/search/q/epstein/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc">
+          <li v-bind:class="{ 'diamond--active': currentActive === 'search', 'diamond': true }" 
+              @click="switchActive('search')">Video search</li>
+        </router-link>
           <li v-bind:class="{ inset: !text, 'inset--active': text }" v-if="currentActive === 'search'" @click="triggerText()">Text</li>
           <li v-bind:class="{ inset: !vis, 'inset--active': vis }" v-if="currentActive === 'search'" @click="triggerVis()">Visualisation</li>
         <li class="diamond" @click="switchActive('comments')">Comments</li>
@@ -35,7 +37,7 @@
 <script>
 import Header from './components/Header.vue';
 import Sidemenu from './components/Sidemenu.vue';
-import {bus} from './main.js'
+import { bus } from './main.js'
 
 export default {
   name: 'App',
@@ -64,7 +66,6 @@ export default {
     },
     switchActive: function (str) {
       this.currentActive = str;
-      console.log(str)
     },
     closeSidemenu: function (val) {
       this.sidemenu = val;
@@ -89,6 +90,17 @@ a {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  background: #1D1D1D;
+  z-index: 100;
+  width: calc(100vw - 5rem);
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+  border-left: 1px solid #4F23FF;
+  border-right: 1px solid #8A8A8A;
 }
 
 @font-face {

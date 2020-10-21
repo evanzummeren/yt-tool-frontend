@@ -13,7 +13,7 @@
     </div>
 
     <div class="sidemenu__close" v-on:click="removeSidemenu()">
-      <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 67.8 67.8" style="enable-background:new 0 0 67.8 67.8;" xml:space="preserve">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 67.8 67.8" style="enable-background:new 0 0 67.8 67.8;" xml:space="preserve">
         <path class="closemenu" d="M42.4,33.9L66.3,10c2-2,2-5.4,0-7.4l-1.1-1.1c-2-2-5.4-2-7.4,0L33.9,25.4L10,1.5c-2-2-5.4-2-7.4,0L1.5,2.6c-2,2-2,5.4,0,7.4 l23.9,23.9L1.5,57.8c-2,2-2,5.4,0,7.4l1.1,1.1c2,2,5.4,2,7.4,0l23.9-23.9l23.9,23.9c2,2,5.4,2,7.4,0l1.1-1.1c2-2,2-5.4,0-7.4 L42.4,33.9z"/>
       </svg>
     </div>
@@ -21,14 +21,14 @@
     <div class="sidemenu__content">
 
       <div class="block">
-      <h5>Accountability</h5>
-      <router-link to="/channels"><li v-on:click="removeSidemenu()">Indexed channels</li></router-link>
-      <router-link to="/methodology"><li v-on:click="removeSidemenu()">Methodology</li></router-link>
+      <h5>Methodology</h5>
+      <router-link to="/channels/1"><li v-on:click="changeView('channels')">Indexed channels</li></router-link>
+      <router-link to="/methodology"><li v-on:click="changeView('methodology')">Technology</li></router-link>
       </div>
 
       <div class="block">
       <h5>Support</h5>
-      <router-link to="/help"><li v-on:click="removeSidemenu()">Help</li></router-link>
+      <router-link to="/help"><li v-on:click="changeView('help')">Help</li></router-link>
       <router-link to="/contact"><li v-on:click="removeSidemenu()">Contact</li></router-link>
       </div>
 
@@ -87,6 +87,10 @@ export default {
 
   },
   methods: {
+    changeView: function(str) {
+      this.$emit('switch', str)
+      this.removeSidemenu();
+    },
     removeSidemenu: function() {
       anime({
         targets: '.gradient',

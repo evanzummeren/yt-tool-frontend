@@ -311,17 +311,6 @@ input {
 
 :-webkit-autofill { color: #fff !important; }
 
-.container {
-  background: #1D1D1D;
-  z-index: 100;
-  width: calc(100vw - 5rem);
-  position: absolute;
-  left: 2rem;
-  top: 2rem;
-  border-left: 1px solid #4F23FF;
-  border-right: 1px solid #8A8A8A;
-}
-
 ul {
   margin: 2rem 0 0 0;
   padding: 0;
