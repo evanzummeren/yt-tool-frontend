@@ -1,5 +1,5 @@
 <template>
-  <div class="container" ref="container">
+  <div class="containerHeader" ref="container">
     <div class="container__blocks">
       <div class="cornerblock"></div>
       <div class="secondcornerblock"></div>
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.containerHeader {
   position: fixed;
   left: 0;
   top: 0;

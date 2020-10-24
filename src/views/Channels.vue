@@ -1,9 +1,13 @@
 <template>
-  <div class="container flexcontainer">
+  <div class="containerChannels flexcontainer">
+    <div class="first__horizontal"></div>
+    <div class="second__horizontal"></div>
+    <div class="right__vertical"></div>
+
     <div class="container__left">
       <h2>Indexed channels</h2>
       <h1>{{channelName}}</h1>
-      <span class="h1__underheading">{{channelData.data.length}} channels</span>
+      <span class="h1__underheading">{{channelData.length}} channels</span>
 
       <ul>
         <li @click="goRoute()"><router-link to="/channels/2">Alt-right</router-link></li>
@@ -25,17 +29,31 @@
           </g>
         </svg>
 
+        <div class="splitline__one"></div>
+        <div class="splitline__two"></div>
+
         <div class="grid__content">
-          <div class="grid__line" v-for="(data, index) in channelData.data" :key="index">
+
+          <div class="heading__gradient"></div>
+          <div class="heading__container">
+            <div class="heading__first headings" v-bind:class="{ 'headings--active': activeTab === 'name' }" @click="sort('name')">channel name</div>
+            <div class="heading__second headings" v-bind:class="{ 'headings--active': activeTab === 'channel_active' }" @click="sort('channel_active')">status</div>
+            <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'view_count' }" @click="sort('view_count')">views</div>
+            <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'subscriber_count' }" @click="sort('subscriber_count')">subscribers</div>
+            <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'video_count' }" @click="sort('video_count')">videos</div>
+          </div>
+          <div class="grid__line" v-for="(data, index) in channelData" :key="index">
+            <router-link :to="'/videos/' + data.id">
             <div class="box__gradient"></div>
-            <span class="line__title"><a :href="`http://youtube.com/channel/${data.id}`" target="_blank">{{data.name}}</a></span>
+            <span class="line__title">{{data.name}}</span>
             <span class="line__removed">
-              <span v-if="data.channel_active">online</span>
+              <span v-if="data.channel_active">active</span>
               <span v-if="!data.channel_active">removed</span>
             </span>
-            <span class="line__removed">{{splitNumber(data.view_count)}} views</span>
-            <span class="line__removed">{{splitNumber(data.subscriber_count)}} subs</span>
-            <span class="line__removed">{{data.video_count}} videos</span>
+            <span class="line__stats views">{{splitNumber(data.view_count)}} views</span>
+            <span class="line__stats">{{splitNumber(data.subscriber_count)}} subs</span>
+            <span class="line__stats">{{data.video_count}} videos</span>
+            </router-link>
           </div>
         </div>
       </div>
@@ -46,14 +64,16 @@
 
 <script>
 import axios from 'axios';
+import arraySort from 'array-sort'
+// var arraySort = require('array-sort');
+
 
 export default {
   name: "Channels",
   data: function() {
     return {
-      channelData: {
-        data: []
-      },
+      channelData: [],
+      activeTab: "name",
       channelName: "channels",
       currentChannel: 2,
       widthPoints: 10,
@@ -65,8 +85,6 @@ export default {
     this.currentChannel = this.$route.params.channel;
   },
   mounted: function() {
-    console.log('moutned');
-    console.log(this.$route);
     console.log(this.$route.params.channel)
     // UGLY solutions
     if ( this.$route.params.channel === '1') { this.channelName = "QAnon" }
@@ -82,17 +100,20 @@ export default {
   methods: {
     goRoute: function() {
       this.$router.go()
-
+    },
+    sort: function(key) {
+      this.channelData = arraySort(this.channelData, key);
+      this.activeTab = key;
     },
     pullData: function() {
       let _this = this;
 
       axios.get(`https://zummie.com/yt888/items/channel?filter[category]=${_this.currentChannel}`)
       .then(function (response) {
-        // console.log(this);
-        _this.channelData = response.data;
+        console.log(response)
+        let responseArray = response.data.data;
+        _this.channelData = arraySort(responseArray, 'name');
         _this.heightPoints = response.data.data.length + 20;
-        console.log(_this.channelData);
         // console.log(response.data)
       })
       .catch( function (error) {
@@ -111,6 +132,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a {
+  display: flex;
+}
+.containerChannels {
+  z-index: 100;
+  width: calc(100vw - 5rem);
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+  border-left: 1px solid #4F23FF;
+}
+
 .flexcontainer {
   display: flex;
   min-height: calc(100vh - 3rem);
@@ -129,7 +162,6 @@ export default {
 .container__right {
   margin-left: 20%;
   width: 80%;
-  background: black;
 }
 
 h2, .h1__underheading {
@@ -193,6 +225,7 @@ svg {
   top: 0px;
   padding: 3.5rem 4rem 0 3rem;
   width: 100%;
+  overflow-x:hidden;
 }
 
 .grid__line {
@@ -201,12 +234,21 @@ svg {
   margin-top: 0.1rem;
   margin-bottom: 1rem;
   width: 100%;
-  padding-left: 2rem;
+  padding-left: 1rem;
   display: flex;
-  color: white;
   font-family: 'Flaco';
   font-size: .9rem;
   position: relative;
+  // overflow-y: scroll;
+}
+
+.grid__line:hover {
+  background: rgb(79, 35, 255);
+  color: black !important;
+}
+
+.grid__line:hover > a .box__gradient {
+  background: linear-gradient(90deg, rgba(79, 35, 255,0) 0%, rgb(79, 35, 255) 100%) !important;
 }
 
 a {
@@ -214,7 +256,7 @@ a {
 }
 
 .line__title {
-  width: 14rem;
+  width: 16rem;
   display: block;
   overflow-x: scroll;
   white-space: nowrap;
@@ -222,8 +264,16 @@ a {
 }
 
 .line__removed {
+  width: 6rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid #575756;
+  white-space: nowrap;
+}
+
+.line__stats {
   width: 10rem;
-  margin-left: 2rem;
+  margin-left: 1rem;
   white-space: nowrap;
 }
 
@@ -238,7 +288,116 @@ a {
 }
 
 .box__gradient::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
-    background: transparent;
+  display: none;  /* Safari and Chrome */
+  background: transparent;
+}
+
+.first__horizontal {
+  position: fixed;
+  height: 1px;
+  width: calc(100vw - 2rem);
+  background-color: #474747;
+  margin-top: 0rem;
+  z-index: 12000;
+}
+
+.second__horizontal {
+  position: fixed;
+  height: 1px;
+  width: calc(100vw - 2rem);
+  background-color: #8a8a8a;
+  margin-top: calc(2rem - 1px);
+  z-index: 12000;
+}
+
+.right__vertical {
+  position: fixed;
+  height: calc(100vh - 2rem);
+  width: 1px;
+  background-color: #8a8a8a;
+  margin-top: calc(2rem - 1px);
+  right: 3rem;
+  z-index: 12000;
+}
+
+.splitline__one {
+  height: 100%;
+  width: 1px;
+  background-color: #575756;
+  position: absolute;
+  left: 21rem;
+  top: 3rem;
+}
+
+.splitline__two {
+  height: 100%;
+  width: 1px;
+  background-color: #575756;
+  position: absolute;
+  left: 27rem;
+  top: 3rem;
+}
+
+.views {
+  border-right: 1px solid #575756;
+}
+
+.heading__container {
+  // background: #101010;
+  line-height: 2rem;
+  margin-top: 0.1rem;
+  margin-bottom: 1rem;
+  width: calc(80% - 11rem);
+  display: flex;
+  font-family: 'Flaco';
+  font-size: .9rem;
+  z-index: 10000;
+  position: fixed;
+  // overflow-y: scroll;
+  background-image: url('../assets/etch.svg');
+  background-size: cover;
+  margin-top: -3rem;
+}
+
+.heading__gradient {
+  width: calc(80% - 11rem);
+  position: fixed;
+  background: rgb(0,0,0);
+  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  height: 265px;
+  margin-top: -185px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.headings {
+  color: white;
+  font-family: 'Flaco-Reg';
+  font-size: 1rem;
+  font-weight: 100;
+}
+
+.headings:hover {
+  cursor: pointer;
+  background: rgba(79,35,255,.3);
+}
+
+.headings--active {
+  background: rgba(79,35,255,.5);
+}
+
+.heading__first {
+  width: 18rem;
+  padding-left: 1rem;
+}
+
+.heading__second {
+  padding-left: 1rem;
+  width: 6rem;
+}
+
+.heading__third {
+  padding-left: 1rem;
+  width: 11rem;
 }
 </style>

@@ -18,7 +18,7 @@
 
     <router-view/>
 
-    <div class="footer__menu">
+    <div class="footer__menu" v-bind:class="{ 'footer__menu--bgon': menushowbg }">
       <ul class="sidenav">
         <router-link to="/search/q/epstein/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc">
           <li v-bind:class="{ 'diamond--active': currentActive === 'search', 'diamond': true }" 
@@ -48,10 +48,24 @@ export default {
       text: true,
       vis: false,
       insetActive: "text",
-      sidemenu: false
+      sidemenu: false,
+      menushowbg: false
     }
   },
+  mounted: function() {
+      this.defineBg();
+  },
+  updated: function() {
+    this.defineBg();
+  },
   methods: {
+    defineBg: function() {
+      if ( this.$route.name === "Search") {
+        this.menushowbg = true;
+      } else {
+        this.menushowbg = false;
+      }      
+    },
     triggerText: function() {
       // Needs refactoring
       this.text = true;
@@ -107,6 +121,12 @@ a {
   font-family: "Flaco";
   src: url("./assets/fonts/fl-mono.woff") format("woff");
 }
+
+@font-face {
+  font-family: "Flaco-Reg";
+  src: url("./assets/fonts/fl-reg.woff") format("woff");
+}
+
 
 @font-face {
   font-family: "Gil";
@@ -193,8 +213,11 @@ body {
   bottom: calc(2rem + 1px);
   height: 240px;
   width: 200px;
-  background: linear-gradient(192deg, rgba(29,29,29,0) 0%, rgba(29,29,29,1) 81%, rgba(29,29,29,1) 100%);
   z-index: 1000;
+}
+
+.footer__menu--bgon {
+  background: linear-gradient(192deg, rgba(29,29,29,0) 0%, rgba(29,29,29,1) 81%, rgba(29,29,29,1) 100%);
 }
 
 .sidenav {
