@@ -31,6 +31,7 @@
 
         <div class="splitline__one"></div>
         <div class="splitline__two"></div>
+        <div class="splitline__three"></div>
 
         <div class="grid__content">
 
@@ -51,8 +52,11 @@
               <span v-if="!data.channel_active">removed</span>
             </span>
             <span class="line__stats views">{{splitNumber(data.view_count)}} views</span>
-            <span class="line__stats">{{splitNumber(data.subscriber_count)}} subs</span>
-            <span class="line__stats">{{data.video_count}} videos</span>
+            <span class="line__subs">{{splitNumber(data.subscriber_count)}} subs</span>
+            <span 
+              class="line__stats"
+              style="padding-left: 1rem"
+              >{{data.video_count}} videos</span>
             </router-link>
           </div>
         </div>
@@ -277,6 +281,12 @@ a {
   white-space: nowrap;
 }
 
+.line__subs {
+  width: 9rem;
+  margin-left: 1rem;
+  white-space: nowrap;
+}
+
 .box__gradient {
   position: absolute;
   height: 2rem;
@@ -320,22 +330,27 @@ a {
   z-index: 12000;
 }
 
-.splitline__one {
+.splitline {
   height: 100%;
   width: 1px;
   background-color: #575756;
   position: absolute;
-  left: 21rem;
   top: 3rem;
-}
 
-.splitline__two {
-  height: 100%;
-  width: 1px;
-  background-color: #575756;
-  position: absolute;
-  left: 27rem;
-  top: 3rem;
+  &__one {
+    @extend .splitline;
+    left: 21rem;
+  }
+
+  &__two {
+    @extend .splitline;
+    left: 27rem;
+  }
+
+    &__three {
+    @extend .splitline;
+    left: 49rem;
+  }
 }
 
 .views {
