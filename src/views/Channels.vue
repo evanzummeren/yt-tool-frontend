@@ -42,6 +42,7 @@
             <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'view_count' }" @click="sort('view_count')">views</div>
             <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'subscriber_count' }" @click="sort('subscriber_count')">subscribers</div>
             <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'video_count' }" @click="sort('video_count')">videos</div>
+            <div class="heading__third headings" v-bind:class="{ 'headings--active': activeTab === 'published_at' }" @click="sort('published_at')">since</div>
           </div>
           <div class="grid__line" v-for="(data, index) in channelData" :key="index">
             <router-link :to="'/videos/' + data.id">
@@ -57,6 +58,11 @@
               class="line__stats"
               style="padding-left: 1rem"
               >{{data.video_count}} videos</span>
+
+                          <span 
+              class="line__stats"
+              style="padding-left: 1rem"
+              >{{data.published_at.split('T')[0]}}</span>
             </router-link>
           </div>
         </div>
@@ -243,7 +249,7 @@ svg {
   font-family: 'Flaco';
   font-size: .9rem;
   position: relative;
-  // overflow-y: scroll;
+  overflow-x: scroll;
 }
 
 .grid__line:hover {
@@ -358,7 +364,6 @@ a {
 }
 
 .heading__container {
-  // background: #101010;
   line-height: 2rem;
   margin-top: 0.1rem;
   margin-bottom: 1rem;
@@ -390,6 +395,7 @@ a {
   font-family: 'Flaco-Reg';
   font-size: 1rem;
   font-weight: 100;
+  display: flex;
 }
 
 .headings:hover {
@@ -402,17 +408,17 @@ a {
 }
 
 .heading__first {
-  width: 18rem;
+  min-width: 18rem;
   padding-left: 1rem;
 }
 
 .heading__second {
   padding-left: 1rem;
-  width: 6rem;
+  min-width: 6rem;
 }
 
 .heading__third {
   padding-left: 1rem;
-  width: 11rem;
+  min-width: 11rem;
 }
 </style>

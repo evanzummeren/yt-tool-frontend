@@ -4,7 +4,10 @@
       <div class="search searchmenu__space">
         <h3>search operators</h3>
         <ul>
-          <li>"exact search"</li>
+          <li>"biblical times"</li>
+          <li>"5g networks"~3</li>
+          <li>d*gs – wildcard</li>
+          <li>epstein user: "Angelo John Gage"</li>
         </ul>
       </div>
       <div class="categories searchmenu__space">
@@ -18,7 +21,6 @@
           <input type="checkbox" id="marxism" value="marxism" v-model="checkedCats" @change="changeCategories"><label for="marxism">marxism</label>
         </div>
 
-        <h4 class="subheading">or search specific channels</h4>
       </div>
       <div class="sort searchmenu__space">
         <h3>sort</h3>

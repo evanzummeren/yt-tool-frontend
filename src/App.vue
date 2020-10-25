@@ -26,8 +26,8 @@
         </router-link>
           <li v-bind:class="{ inset: !text, 'inset--active': text }" v-if="currentActive === 'search'" @click="triggerText()">Text</li>
           <li v-bind:class="{ inset: !vis, 'inset--active': vis }" v-if="currentActive === 'search'" @click="triggerVis()">Visualisation</li>
-        <li class="diamond" @click="switchActive('comments')">Comments</li>
-        <li class="diamond">Notifications</li>
+        <li class="diamond tooltip" @click="switchActive('comments')">Comments<span class="tooltiptext">Coming soon</span></li>
+        <li class="diamond tooltip">Notifications<span class="tooltiptext">Coming soon</span></li>
       </ul>
     </div>
 
@@ -44,7 +44,7 @@ export default {
   components: {Header, Sidemenu},
   data: function() {
     return {
-      currentActive: "search",
+      currentActive: "",
       text: true,
       vis: false,
       insetActive: "text",
@@ -53,6 +53,10 @@ export default {
     }
   },
   mounted: function() {
+    bus.$on('switchActiveMenu', (data) => {
+      console.log(data)
+    })
+
       this.defineBg();
   },
   updated: function() {
@@ -113,6 +117,7 @@ a {
   position: absolute;
   left: 2rem;
   top: 2rem;
+  min-height: 100vh;
   border-left: 1px solid #4F23FF;
   border-right: 1px solid #8A8A8A;
 }
@@ -288,4 +293,31 @@ body {
 }
 
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  // width: 120px;
+  background-color: black;
+  font-size: .8rem;
+  color: #fff;
+  text-align: center;
+  margin-left: .5rem;
+  padding: 5px 4px;
+  border-radius: 6px;
+  white-space: nowrap;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 </style>

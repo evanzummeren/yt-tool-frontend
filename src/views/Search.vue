@@ -19,6 +19,10 @@
       <div class="categories" @click="openSearchMenu">filters</div>
     </header>
 
+    <NoResults 
+      :text="resultsMetadata.errorMessage"
+      v-if="resultsMetadata.noResults" />
+
     <Datavis 
       :aggs="aggsResults"
       v-if="view === 'datavis'" />
@@ -45,7 +49,7 @@
         </div>
       </div>
       <div class="statusbar__textcontainer">
-        {{this.resultsMetadata.results}} results, showing 50
+        {{this.resultsMetadata.results}} results, showing {{this.resultsMetadata.currentlyShowing}}
       </div>
     </div>
 
@@ -54,26 +58,22 @@
 
 <script>
 import Result from '../components/Result.vue';
+import NoResults from '../components/NoResults.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
 import Embed from '../components/Embed.vue'
 import Ngram from '../components/Ngram.vue'
 import Datavis from '../components/Datavis.vue'
-// import anime from 'animejs/lib/anime.es.js';
 const axios = require('axios');
 
 import {bus} from '../main.js'
 
 import serverCredentials from '../mixins/server.json';
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
-// http://localhost:8080/search/q/%22q%20says%22/cat/blabla
 
 export default {
   name: 'Home',
   components: {
-    Result, SearchMenu, Embed, Datavis, Ngram
+    Result, SearchMenu, Embed, Datavis, Ngram, NoResults
   },
   data: function() {
     return {
@@ -92,11 +92,14 @@ export default {
       keyword: "",
       infiniteScroll: {
         busy: false,
-        size: 50,
+        size: 20,
         pos: 0
       },
       resultsMetadata: {
-        results: 0
+        errorMessage: "",
+        noResults: false,
+        results: 0,
+        currentlyShowing: 0
       },
       results: [],
       aggsResults: {}
@@ -108,6 +111,8 @@ export default {
     this.searchOptions.sort = this.$route.params.sort;
     this.formQuery(this.$route.params.query, this.searchOptions.categories, false);
 
+    bus.$emit('switchActiveMenu', 'search')
+
     bus.$on('triggerSwitch', this.switchView)
   },
   methods: {
@@ -118,7 +123,7 @@ export default {
         this.formQuery(this.$route.params.query, this.searchOptions.categories, true);
       }
 
-      console.log(type)
+      // console.log(type)
     },
 
     loadMore: function() {
@@ -127,10 +132,12 @@ export default {
 
       var _this = this;
 
-      setTimeout(() => {
-        _this.formQuery(_this.keyword, _this.searchOptions.categories, false)
-        this.infiniteScroll.busy = false;
-      }, 1000);
+        setTimeout(() => {
+          _this.formQuery(_this.keyword, _this.searchOptions.categories, false)
+          this.infiniteScroll.busy = false;
+        }, 1000);
+
+
     },
     triggerEmbed(str) {
       this.embed.dataUrl = str;
@@ -147,14 +154,12 @@ export default {
     },
     passOnline(arr) { this.searchOptions.online = arr; },
     passSort(type) { 
-      console.log(type);
       this.searchOptions.sort = type },
     performSearch() {
       this.results = [];
       this.infiniteScroll.pos = 0;
       this.formQuery(this.keyword, this.searchOptions.categories, false);
       this.showSearchMenu = false;
-      console.log(this.searchOptions.categories);
       this.$router.push(`../../../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}/sort/${this.searchOptions.sort}`)
     },
     stitchCategories() {
@@ -162,8 +167,6 @@ export default {
       return str;
     },
     formQuery(str, cat, agg) {
-      console.log('search cat ', cat);
-
       let aggSettings = {};
       let highlightSettings = {};
 
@@ -225,7 +228,8 @@ export default {
             "must": [ {
               "query_string": {
                 "query": `${str}`,
-                "default_field": "line" 
+                "default_field": "line",
+                "default_operator": "AND"
                 }
               }, {
                 "terms": { "online": this.searchOptions.online } 
@@ -251,22 +255,44 @@ export default {
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
-        console.log(response)
 
-        if ( agg === false ) {
+        if ( agg === false ) { // If there is no data aggregation
           _this.resultsMetadata.results = response.data.hits.total;
+
           response.data.hits.hits.forEach( el => {
-            // console.log(el)
             _this.results.push( el )
           });
-        } else if ( agg === true ) {
+
+          _this.calculateAmountResults();
+        } else if ( agg === true ) { // User clicked on datavis
           _this.aggsResults = response.data.aggregations;
-          console.log(_this.aggsResults);
         }
+
       })
       .catch( function (error) {
         console.log(error);
+        _this.resultsMetadata.errorMessage = "Invalid request";
+        _this.resultsMetadata.noResults = true;
       });
+    },
+    calculateAmountResults() {
+      console.log('calculating');
+      let meta = this.resultsMetadata;
+
+      console.log(meta)
+
+      if ( meta.results === 0 ) {
+        this.resultsMetadata.errorMessage = "No results";
+        this.resultsMetadata.noResults = true;
+      } else {
+        this.resultsMetadata.noResults = false;
+      }
+
+      if ( meta.results < this.infiniteScroll.size) {
+        meta.currentlyShowing = this.resultsMetadata.results;
+      } else {
+        meta.currentlyShowing = meta.currentlyShowing + this.infiniteScroll.size;
+      }
     }
   }
 }

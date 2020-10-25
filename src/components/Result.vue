@@ -1,6 +1,7 @@
 <template>
 <div 
   class="singleresult" 
+  v-bind:class="{activated: activated}"
   @click="loadAdditionalLines"
   ref="singleLine"
   @mouseover="showScreenshot = true; addTracking()"
@@ -10,7 +11,11 @@
     <div class="dateline"></div>
     <div class="horizontalline" v-if="render.date"></div>
     <span class="date" v-if="render.date">{{this.formattedDate}}</span>
-    <span class="user" v-if="render.author"><span v-bind:class="{ 'circle online': online, 'circle offline': !online }"></span>
+    <span class="user" 
+      v-bind:class="{activated: activated}"
+
+      v-if="render.author">
+      <span v-bind:class="{ 'circle online': online, 'circle offline': !online }"></span>
       <span v-if="!showScreenshot">{{author}}</span><span v-if="showScreenshot">{{cat}} – {{views}}</span>
     </span>
 
@@ -36,9 +41,7 @@
       class="exportlinks"
       v-if="showScreenshot">
       <div class="context"></div>
-      <!-- <a :href="'https://www.youtube.com/watch?v=' + additionalmeta.id + '?t=' + this.fixTimestamp(this.resultline._source.start)" target="_blank"> -->
       <div class="watch" @click="watchEmbed"></div>
-      <!-- </a> -->
 
     </div>
 
@@ -51,7 +54,6 @@ import moment from 'moment';
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
 // import Screenshot from './Screenshot.vue'
-
 
 export default {
   name: 'Result',
@@ -70,6 +72,7 @@ export default {
       showScreenshot: false,
       posHighlight: {},
       widthAdjustment: 0,
+      activated: false,
       text: {
         blur: true,
         prevLine: "this text will be loaded in and some",
@@ -83,8 +86,6 @@ export default {
     }
   },
   mounted: function() {
-    console.log('additional metadata')
-    console.log(this.additionalmeta);
     this.posHighlight = this.$refs.highlightedtext.getBoundingClientRect();
 
     this.author = this.additionalmeta.user;
@@ -96,8 +97,6 @@ export default {
     let utcSeconds = this.additionalmeta.date*1000;
     this.formattedDate = moment(new Date(utcSeconds)).format('LL');
 
-    console.log(this.preresult);
-
     if(this.preresult === undefined) {
       console.log('is undefined')
     } else {
@@ -106,18 +105,8 @@ export default {
         this.render.date = false
       }
 
-      // if (this.author === this.nextresult.inner_hits.video.hits.hits[0]._source.user && this.author === this.preresult.inner_hits.video.hits.hits[0]._source.user) {
-      //   console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
-      //   this.render.author = false
-      // }
-      
-      // if (this.author !== this.nextresult.inner_hits.video.hits.hits[0]._source.user) {
-      //   console.log('nEXT AUTHOR ', this.nextresult.inner_hits.video.hits.hits[0]._source.user)
-      //   this.render.author = false
-      // }
     }
 
-    console.log(this.author)
   },
   methods: {
     watchEmbed() {
@@ -128,6 +117,7 @@ export default {
     },
     loadAdditionalLines() {
       this.watchEmbed();
+      this.activated = true;
 
       let vidid = this.resultline._id.slice(0,12);
       let pos = this.resultline._id.slice(12,20);
@@ -149,7 +139,6 @@ export default {
         }
       })
       .then(function (response) {
-        console.log(response);
         _this.text.blur = false;
         _this.text.prevLine = response.data.hits.hits[0]._source.line;
         _this.text.nextLine = response.data.hits.hits[1]._source.line;
@@ -347,5 +336,9 @@ export default {
 
 .offline {
   background: #ff9292;
+}
+
+.activated {
+  background: #171717 !important;
 }
 </style>
