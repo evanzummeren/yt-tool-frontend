@@ -6,6 +6,13 @@
       @switch="switchActive"
       @close="closeSidemenu" />
 
+      <div class="passprotected" v-if="showBlock">
+
+        <input 
+          class="passinput" v-model="pass" v-on:keyup.enter="passEnter" placeholder="Password">
+
+      </div>
+
       <div class="verticalline--top"></div>
       <div class="verticalline--header"></div>
       <div class="menu" v-on:click="closeSidemenu(true)">
@@ -16,7 +23,7 @@
         </svg>
       </div>
 
-    <router-view/>
+    <router-view v-if="!showBlock" />
 
     <div class="footer__menu" v-bind:class="{ 'footer__menu--bgon': menushowbg }">
       <ul class="sidenav">
@@ -44,6 +51,8 @@ export default {
   components: {Header, Sidemenu},
   data: function() {
     return {
+      showBlock: true,
+      pass: "",
       currentActive: "",
       text: true,
       vis: false,
@@ -87,6 +96,12 @@ export default {
     },
     closeSidemenu: function (val) {
       this.sidemenu = val;
+    },
+    passEnter: function() {
+      if (this.pass === "tub3") {
+        this.showBlock = false;
+      }
+      console.log('pass')
     }
   }
 }
@@ -319,5 +334,22 @@ body {
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.passprotected {
+  height: 100vh;
+  width: 100vw;
+  background: #1D1D1D;
+  position: fixed;
+  z-index: 10000000000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.passinput {
+  width: 200px;
+  font-family: 'Flaco';
+  font-size: 1rem;
 }
 </style>

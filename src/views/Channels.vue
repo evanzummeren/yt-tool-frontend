@@ -168,7 +168,6 @@ a {
   padding: 6rem 2rem 0 2rem;
   position: fixed;
   min-height: calc(100vh - 2rem);
-
 }
 
 .container__right {

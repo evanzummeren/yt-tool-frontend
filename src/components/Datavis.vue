@@ -1,7 +1,25 @@
 <template>
-  <div class="datavis">
+  <div class="containerChannels flexcontainer">
+
+    <div class="container__left">
+      <h2>Visualisation</h2>
+      <h1>{{query}}</h1>
+      <span class="h1__underheading">333 channels</span>
+
+    </div>
 
     <div class="datavis__container">
+
+
+
+
+
+
+
+
+
+
+
       <div class="info">
         <h3>Channel frequency</h3>
         <p v-for="(result, index) in aggs.categories.buckets"
@@ -39,10 +57,9 @@
 <script>
 import linearScale from 'simple-linear-scale';
 
-
 export default {
   name: "datavis",
-  props: ['aggs'],
+  props: ['aggs', 'query'],
   data: function() {
     return {
       highestNumber: 0
@@ -68,10 +85,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.datavis {
-  width: 100%;
-  height: 100%;
+.containerChannels {
+  z-index: 100;
+  width: calc(100vw - 5rem);
+  top: 2rem;
 }
+
+.flexcontainer {
+  display: flex;
+  min-height: calc(100vh - 3rem);
+}
+
+.container__left {
+  width: 20%;
+  background: black;
+  border-right: 1px solid white;
+  padding: 6rem 2rem 0 2rem;
+  position: fixed;
+  min-height: calc(100vh - 2rem);
+}
+
+
+
 
 .datavis__container {
   display: flex;
@@ -130,4 +165,42 @@ h3 {
     font-family: 'Flaco';
   font-size: 1rem;
 }
+
+
+
+
+
+
+
+
+
+.container__left {
+  width: 20%;
+  background: black;
+  border-right: 1px solid white;
+  padding: 6rem 2rem 0 2rem;
+  position: fixed;
+  min-height: calc(100vh - 2rem);
+}
+
+h2, .h1__underheading {
+  font-family: 'Flaco';
+  font-size: .8rem;
+  font-weight: 100;
+  color: white;
+  text-transform: uppercase;
+}
+
+.h1__underheading {
+  color: #9E9E9E;
+}
+
+h1 {
+  font-family: 'Gil';
+  font-size: 2.5rem;
+  font-weight: 100;
+  color: white;
+  margin-bottom: .3rem;
+}
+
 </style>

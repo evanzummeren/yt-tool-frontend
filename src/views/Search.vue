@@ -24,6 +24,7 @@
       v-if="resultsMetadata.noResults" />
 
     <Datavis 
+      v-bind:query="currentQuery"
       :aggs="aggsResults"
       v-if="view === 'datavis'" />
 
@@ -78,6 +79,7 @@ export default {
   data: function() {
     return {
       view: "text",
+      currentQuery: "",
       embed: {
         dataUrl: "",
         open: false
@@ -109,6 +111,7 @@ export default {
     this.keyword = this.$route.params.query;
     this.searchOptions.categories = this.$route.params.categories.split(",");
     this.searchOptions.sort = this.$route.params.sort;
+    this.currentQuery = this.keyword;
     this.formQuery(this.$route.params.query, this.searchOptions.categories, false);
 
     bus.$emit('switchActiveMenu', 'search')
@@ -165,6 +168,7 @@ export default {
     performSearch() {
       this.resetSearch();
       this.formQuery(this.keyword, this.searchOptions.categories, false);
+      this.currentQuery = this.keyword;
       this.$router.push(`../../../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}/sort/${this.searchOptions.sort}`)
     },
     stitchCategories() {
