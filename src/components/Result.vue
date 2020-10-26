@@ -15,9 +15,14 @@
       v-bind:class="{activated: activated}"
 
       v-if="render.author">
-      <span v-bind:class="{ 'circle online': online, 'circle offline': !online }"></span>
       <span v-if="!showScreenshot">{{author}}</span><span v-if="showScreenshot">{{cat}} – {{views}}</span>
     </span>
+
+    <div class="author-circle" 
+      v-bind:style="{backgroundImage: 'url(https://cdnzummie.nyc3.digitaloceanspaces.com/avatar/' + additionalmeta.channel_id + '.jpg)'}"
+      v-if="render.author"></div>
+    <span v-bind:class="{ 'circle online': online, 'circle offline': !online }" v-if="render.author"></span>
+
 
     <div class="authorbeginline" v-if="render.author"></div>
     <div class="authorbeginline--horizontal" v-if="render.author"></div>
@@ -54,6 +59,7 @@ import moment from 'moment';
 const axios = require('axios');
 import serverCredentials from '../mixins/server.json';
 // import Screenshot from './Screenshot.vue'
+
 
 export default {
   name: 'Result',
@@ -97,12 +103,27 @@ export default {
     let utcSeconds = this.additionalmeta.date*1000;
     this.formattedDate = moment(new Date(utcSeconds)).format('LL');
 
-    if(this.preresult === undefined) {
+    if(this.preresult === undefined || this.nextresult === undefined) {
       console.log('is undefined')
     } else {
 
-      if (this.additionalmeta.date === this.preresult._source.date) {
+      console.log(this.preresult._source.date)
+
+      let predateSeconds = this.preresult._source.date * 1000;
+      let predateFormatted = moment(new Date(predateSeconds)).format('LL')
+
+      // console.log(this.formattedDate);
+      console.log(this.preresult._source.channel_id);
+
+      console.log('next result')
+      console.log(this.nextresult);
+
+      if (this.formattedDate === predateFormatted && this.additionalmeta.channel_id === this.preresult._source.channel_id) {
         this.render.date = false
+      }
+
+      if (this.author === this.preresult._source.user) {
+        this.render.author = false;
       }
 
     }
@@ -220,7 +241,7 @@ export default {
   position: absolute;
   margin-left: 3.5rem;
   background: #1D1D1D;
-  padding: 0 .5rem;
+  padding: 0 1rem 0 1rem;
   z-index: 9;
 }
 
@@ -241,7 +262,7 @@ export default {
 }
 
 .authorbeginline {
-  width:  1px;
+  width:  1.4px;
   border-left: 1px dotted #BBBBBB;
   margin-top: 3rem;
   height: 3rem;
@@ -323,11 +344,14 @@ export default {
 }
 
 .circle {
-  width: 6px;
-  height: 6px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-right: 6px;
+width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    margin-right: 6px;
+    position: absolute;
+    margin-top: 37px;
+    margin-left: 50px;
+    z-index: 11;
 }
 
 .online {
@@ -340,5 +364,17 @@ export default {
 
 .activated {
   background: #171717 !important;
+}
+
+.author-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 32px;
+  background: #333;
+  position: absolute;
+  margin-top: 32px;
+  margin-left: 24px;
+  z-index: 10;
+  background-size: cover;
 }
 </style>

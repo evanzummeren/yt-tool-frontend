@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Search from '../views/Search.vue'
-// import Home from '../views/Home.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
   {
     path: '/search/q/:query/cat/:categories/sort/:sort',
     // path: '/q/:query/c/:categories',

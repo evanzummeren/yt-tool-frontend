@@ -155,11 +155,16 @@ export default {
     passOnline(arr) { this.searchOptions.online = arr; },
     passSort(type) { 
       this.searchOptions.sort = type },
-    performSearch() {
-      this.results = [];
+    resetSearch() {
+      window.scrollTo(0, 0); 
+
+      this.results = []; 
       this.infiniteScroll.pos = 0;
-      this.formQuery(this.keyword, this.searchOptions.categories, false);
       this.showSearchMenu = false;
+    },
+    performSearch() {
+      this.resetSearch();
+      this.formQuery(this.keyword, this.searchOptions.categories, false);
       this.$router.push(`../../../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}/sort/${this.searchOptions.sort}`)
     },
     stitchCategories() {
@@ -267,7 +272,6 @@ export default {
         } else if ( agg === true ) { // User clicked on datavis
           _this.aggsResults = response.data.aggregations;
         }
-
       })
       .catch( function (error) {
         console.log(error);
@@ -276,10 +280,7 @@ export default {
       });
     },
     calculateAmountResults() {
-      console.log('calculating');
       let meta = this.resultsMetadata;
-
-      console.log(meta)
 
       if ( meta.results === 0 ) {
         this.resultsMetadata.errorMessage = "No results";

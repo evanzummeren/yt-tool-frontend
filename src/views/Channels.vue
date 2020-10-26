@@ -95,6 +95,8 @@ export default {
     this.currentChannel = this.$route.params.channel;
   },
   mounted: function() {
+    window.scrollTo(0, 0); 
+
     console.log(this.$route.params.channel)
     // UGLY solutions
     if ( this.$route.params.channel === '1') { this.channelName = "QAnon" }

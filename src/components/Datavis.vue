@@ -1,7 +1,7 @@
 <template>
   <div class="datavis">
 
-    <div class="container">
+    <div class="datavis__container">
       <div class="info">
         <h3>Channel frequency</h3>
         <p v-for="(result, index) in aggs.categories.buckets"
@@ -73,7 +73,7 @@ export default {
   height: 100%;
 }
 
-.container {
+.datavis__container {
   display: flex;
 }
 
