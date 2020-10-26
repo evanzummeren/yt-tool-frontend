@@ -18,6 +18,12 @@ const routes = [
     component: Search
   },
   {
+    path: '/search/q/:query/cat/:categories/sort/:sort/gte/:gte/lte/:lte',
+    // path: '/q/:query/c/:categories',
+    name: 'SearchWithEpoch',
+    component: Search
+  },
+  {
     path: '/channels/:channel',
     name: 'Channels',
     // route level code-splitting
@@ -48,5 +54,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
 
 export default router

@@ -15,6 +15,7 @@
     "core-js": "^3.6.5",
     "moment": "^2.29.0",
     "pixi.js": "^5.3.3",
+    "simple-analytics-vue": "^1.1.1",
     "simple-linear-scale": "^1.0.1",
     "v-calendar": "^1.0.8",
     "vue": "^2.6.11",

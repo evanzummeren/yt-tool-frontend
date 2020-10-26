@@ -106,17 +106,10 @@ export default {
     if(this.preresult === undefined || this.nextresult === undefined) {
       console.log('is undefined')
     } else {
-
-      console.log(this.preresult._source.date)
-
       let predateSeconds = this.preresult._source.date * 1000;
       let predateFormatted = moment(new Date(predateSeconds)).format('LL')
 
       // console.log(this.formattedDate);
-      console.log(this.preresult._source.channel_id);
-
-      console.log('next result')
-      console.log(this.nextresult);
 
       if (this.formattedDate === predateFormatted && this.additionalmeta.channel_id === this.preresult._source.channel_id) {
         this.render.date = false

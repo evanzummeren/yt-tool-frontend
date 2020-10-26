@@ -51,7 +51,8 @@ export default {
   components: {Header, Sidemenu},
   data: function() {
     return {
-      showBlock: true,
+      showBlock: false,
+      // showBlock: true,
       pass: "",
       currentActive: "",
       text: true,
@@ -194,16 +195,16 @@ body {
 }
 
 .vc-bg-gray-900 {
-  background-color: black !important;
+  background-color: #B2B2B2 !important;
 }
 
 .vc-text-gray-200 {
-  color: #B2B2B2 !important;
+  color:black !important;
   font-family: 'Flaco' !important;
 }
 
 .vc-text-gray-100 {
-  color: white !important;
+  color: black !important;
   font-family: 'Flaco' !important;
 }
 

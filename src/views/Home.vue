@@ -13,9 +13,10 @@
         <li v-if="country === 'NL'"><router-link to='/search/q/"de%20overheid"/cat/nlconspiracy/sort/desc'>"de overheid"</router-link></li>
         <li v-if="country === 'NL'"><router-link to='/search/q/rechten/cat/nlconspiracy/sort/desc'>rechten</router-link></li>
       </ul>
-      <span class="relevant">more relevant right now</span>
+      <span class="relevant">relevant right now</span>
       <ul>
         <li><router-link to='/search/q/"voting%20fraud"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"voting fraud"</router-link></li>
+        <li><router-link to='/search/q/"the%20purge"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"the purge"</router-link></li>
       </ul>
     </div>
   </div>

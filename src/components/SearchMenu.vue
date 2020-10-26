@@ -36,14 +36,14 @@
         <ul class="filters">
           <li>start date</li>
             <DatePicker 
-              v-model='selectedFirstDate' 
+                v-model='dates.selectedFirstDate' 
                 :value="null"
                 color="purple"
                 is-dark />
 
           <li>end date</li>
             <DatePicker 
-              v-model='selectedSecondDate' 
+                v-model='dates.selectedSecondDate' 
                 :value="null"
                 color="purple"
                 is-dark />
@@ -82,12 +82,14 @@ export default {
   components: {
     DatePicker
   },
-  props: ['checkedCategories', 'checkedOnlineOffline', 'incomingSort'],
+  props: ['checkedCategories', 'checkedOnlineOffline', 'incomingSort', 'firstDate', 'secondDate'],
   data: function() {
     return {
       sort: this.incomingSort,
-      selectedFirstDate: new Date(2005, 1, 14),
-      selectedSecondDate: new Date(),
+      dates: {
+        selectedFirstDate: this.firstDate,
+        selectedSecondDate: this.secondDate
+      },
       checkedCats: [],
       checkedOnline: []
     }
@@ -112,6 +114,14 @@ export default {
     })
 
     this.animatePianoKeys(); 
+  },
+  watch: {
+    'dates.selectedFirstDate': function(newVal){
+      this.$parent.passDates(newVal, 'first');
+    },
+    'dates.selectedSecondDate': function(newVal){
+      this.$parent.passDates(newVal, 'second');
+    }
   },
   methods: {
     changeCategories: function() {

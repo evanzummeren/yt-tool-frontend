@@ -4,6 +4,8 @@
 
     <SearchMenu 
       v-if="showSearchMenu"
+      :firstDate="searchOptions.firstDate"
+      :secondDate="searchOptions.secondDate"
       :checkedCategories="searchOptions.categories"
       :incomingSort="searchOptions.sort"
       :checkedOnlineOffline="searchOptions.online" />
@@ -88,6 +90,8 @@ export default {
         categories: ['altright', 'althealth'],
         sort: "desc",
         online: [true, false],
+        firstDate: new Date(2005, 1, 14),
+        secondDate: new Date(),
         filter: []
       },
       showSearchMenu: false,
@@ -112,10 +116,14 @@ export default {
     this.searchOptions.categories = this.$route.params.categories.split(",");
     this.searchOptions.sort = this.$route.params.sort;
     this.currentQuery = this.keyword;
+
+    if ('lte' in this.$route.params) {
+      this.searchOptions.firstDate = this.epochToDate(this.$route.params.gte);
+      this.searchOptions.secondDate = this.epochToDate(this.$route.params.lte);
+    }
     this.formQuery(this.$route.params.query, this.searchOptions.categories, false);
 
     bus.$emit('switchActiveMenu', 'search')
-
     bus.$on('triggerSwitch', this.switchView)
   },
   methods: {
@@ -126,21 +134,17 @@ export default {
         this.formQuery(this.$route.params.query, this.searchOptions.categories, true);
       }
 
-      // console.log(type)
     },
-
     loadMore: function() {
       this.infiniteScroll.busy = true;
       this.infiniteScroll.pos = this.infiniteScroll.pos + this.infiniteScroll.size;
 
       var _this = this;
 
-        setTimeout(() => {
-          _this.formQuery(_this.keyword, _this.searchOptions.categories, false)
-          this.infiniteScroll.busy = false;
-        }, 1000);
-
-
+      setTimeout(() => {
+        _this.formQuery(_this.keyword, _this.searchOptions.categories, false)
+        this.infiniteScroll.busy = false;
+      }, 1000);
     },
     triggerEmbed(str) {
       this.embed.dataUrl = str;
@@ -152,12 +156,12 @@ export default {
     openSearchMenu() {
       this.showSearchMenu = !this.showSearchMenu;
     },
-    passCategories(arr) {
-      this.searchOptions.categories = arr;
+    passDates(date, type) { // refactor to one function with big obj
+      this.searchOptions[type + 'Date'] = date;
     },
-    passOnline(arr) { this.searchOptions.online = arr; },
-    passSort(type) { 
-      this.searchOptions.sort = type },
+    passCategories(arr) { this.searchOptions.categories = arr; }, // refactor to one function with big obj
+    passOnline(arr) { this.searchOptions.online = arr; }, // refactor to one function with big obj
+    passSort(type) { this.searchOptions.sort = type }, // refactor to one function with big obj
     resetSearch() {
       window.scrollTo(0, 0); 
 
@@ -169,7 +173,7 @@ export default {
       this.resetSearch();
       this.formQuery(this.keyword, this.searchOptions.categories, false);
       this.currentQuery = this.keyword;
-      this.$router.push(`../../../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}/sort/${this.searchOptions.sort}`)
+      this.$router.push(`../../../../../../../../../../search/q/${this.keyword}/cat/${this.stitchCategories()}/sort/${this.searchOptions.sort}/gte/${this.epochConvert(this.searchOptions.firstDate)}/lte/${this.epochConvert(this.searchOptions.secondDate)}`)
     },
     stitchCategories() {
       let str = this.searchOptions.categories.join(",");
@@ -244,10 +248,16 @@ export default {
                 "terms": { "online": this.searchOptions.online } 
               }, {
                 "terms": { "category": this.searchOptions.categories }
-              }
-
+              }, { "range" : {
+                      "date" : {
+                        "gte" : this.epochConvert(this.searchOptions.firstDate),
+                        "lte" : this.epochConvert(this.searchOptions.secondDate) + 86400
+                      }
+                    }
+                }
             ]
-        }},
+          }
+        },
         "aggs": aggSettings,
         "highlight" : highlightSettings
       }
@@ -282,6 +292,13 @@ export default {
         _this.resultsMetadata.errorMessage = "Invalid request";
         _this.resultsMetadata.noResults = true;
       });
+    },
+    epochConvert(dateObj) {
+      return Math.round(dateObj.getTime() / 1000)
+    },
+    epochToDate(int) {
+      let newD = new Date(int * 1000);
+      return newD;
     },
     calculateAmountResults() {
       let meta = this.resultsMetadata;
