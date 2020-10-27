@@ -385,7 +385,7 @@ ul {
   line-height: 2rem;
   padding-left: 1rem;
   width: 15rem;
-  font-family: 'Flaco-mono';
+  font-family: 'Flaco';
   border-left: 1px solid #2F2F2F;
   font-size: .9rem;
   cursor: pointer;

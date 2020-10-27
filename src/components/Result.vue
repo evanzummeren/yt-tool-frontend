@@ -178,7 +178,7 @@ export default {
 
 <style lang="scss" scoped>
 .singleresult {
-  font-family: 'Flaco-mono';
+  font-family: 'Flaco';
   display: flex;
   color: #BBBBBB;
   font-size: 1.2rem;
@@ -228,7 +228,7 @@ export default {
 }
 
 .user {
-  font-family: 'Flaco-mono';
+  font-family: 'Flaco';
   font-size: .8rem;
   text-transform: uppercase;
   position: absolute;
