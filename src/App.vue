@@ -133,7 +133,7 @@ a {
   position: absolute;
   left: 2rem;
   top: 2rem;
-  min-height: 100vh;
+  // min-height: 100vh;
   border-left: 1px solid #4F23FF;
   border-right: 1px solid #8A8A8A;
 }

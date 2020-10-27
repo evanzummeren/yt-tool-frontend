@@ -12,7 +12,10 @@ export const bus = new Vue()
 
 Vue.use(VueSpriteAnimator)
 Vue.use(infiniteScroll)
-Vue.use(SimpleAnalytics, { domain: "api.raditube.com" });
+Vue.use(SimpleAnalytics, { 
+  domain: "api.raditube.com",
+  skip: process.env.NODE_ENV !== "production"
+});
 
 new Vue({
   router,

@@ -28,6 +28,7 @@
     <Datavis 
       v-bind:query="currentQuery"
       :aggs="aggsResults"
+      :amountResults="this.resultsMetadata.results"
       v-if="view === 'datavis'" />
 
     <Embed 
@@ -121,7 +122,10 @@ export default {
       this.searchOptions.firstDate = this.epochToDate(this.$route.params.gte);
       this.searchOptions.secondDate = this.epochToDate(this.$route.params.lte);
     }
+
     this.formQuery(this.$route.params.query, this.searchOptions.categories, false);
+
+    this.$parent.switchActive('search');
 
     bus.$emit('switchActiveMenu', 'search')
     bus.$on('triggerSwitch', this.switchView)
@@ -132,6 +136,9 @@ export default {
 
       if (type === 'datavis') {
         this.formQuery(this.$route.params.query, this.searchOptions.categories, true);
+        console.log('form query')
+      } else {
+        this.$parent.triggerText();
       }
 
     },
@@ -164,6 +171,8 @@ export default {
     passSort(type) { this.searchOptions.sort = type }, // refactor to one function with big obj
     resetSearch() {
       window.scrollTo(0, 0); 
+      this.switchView('text');
+      this.$parent.triggerText();
 
       this.results = []; 
       this.infiniteScroll.pos = 0;
@@ -216,7 +225,8 @@ export default {
             "date_histogram": {
               "field": "date",
               "interval": "month"
-            }
+            },
+
           }
         }
 
@@ -249,7 +259,7 @@ export default {
               }, {
                 "terms": { "category": this.searchOptions.categories }
               }, { "range" : {
-                      "date" : {
+                    "date" : {
                         "gte" : this.epochConvert(this.searchOptions.firstDate),
                         "lte" : this.epochConvert(this.searchOptions.secondDate) + 86400
                       }
@@ -274,6 +284,7 @@ export default {
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
+        console.log(response);
 
         if ( agg === false ) { // If there is no data aggregation
           _this.resultsMetadata.results = response.data.hits.total;
@@ -298,6 +309,7 @@ export default {
     },
     epochToDate(int) {
       let newD = new Date(int * 1000);
+
       return newD;
     },
     calculateAmountResults() {
