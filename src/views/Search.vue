@@ -149,8 +149,10 @@ export default {
       var _this = this;
 
       setTimeout(() => {
+        if (_this.view === "text") {
         _this.formQuery(_this.keyword, _this.searchOptions.categories, false)
         this.infiniteScroll.busy = false;
+        }
       }, 1000);
     },
     triggerEmbed(str) {

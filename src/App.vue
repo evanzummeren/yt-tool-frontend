@@ -9,7 +9,10 @@
       <div class="passprotected" v-if="showBlock">
 
         <input 
-          class="passinput" v-model="pass" v-on:keyup.enter="passEnter" placeholder="Password">
+          class="passinput" 
+          v-model="pass" 
+          v-on:keyup.enter="passEnter" 
+          placeholder="Password">
 
       </div>
 

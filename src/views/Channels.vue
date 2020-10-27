@@ -251,6 +251,13 @@ svg {
   font-size: .9rem;
   position: relative;
   overflow-x: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.grid__line::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 
 .grid__line:hover {
@@ -272,6 +279,13 @@ a {
   overflow-x: scroll;
   white-space: nowrap;
   position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.line__title::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 
 .line__removed {
