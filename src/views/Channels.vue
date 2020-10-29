@@ -97,7 +97,7 @@ export default {
   mounted: function() {
     window.scrollTo(0, 0); 
 
-    console.log(this.$route.params.channel)
+    // console.log(this.$route.params.channel)
     // UGLY solutions
     if ( this.$route.params.channel === '1') { this.channelName = "QAnon" }
     if ( this.$route.params.channel === '2') { this.channelName = "Alt-right" }

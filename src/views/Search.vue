@@ -199,7 +199,7 @@ export default {
           "channels": {
             "terms": {
               "field": "user",
-              "size": 50
+              "size": 100
             }
           },
           "categories": {

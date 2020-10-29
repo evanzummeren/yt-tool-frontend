@@ -54,6 +54,7 @@ export default {
   },
   methods: {
     triggerDatavis() {
+      // console.log(this.aggs)
       this.generatePieData(this.aggs.removed);
       this.generateCommunityData(this.aggs.categories.buckets);
       this.generateNgramData(this.aggs.mentions_over_time.buckets);
