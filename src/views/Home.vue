@@ -23,7 +23,7 @@
 </template>
 
 <script>
-const axios = require('axios');
+// const axios = require('axios');
 import Searchbar from '../components/Searchbar.vue';
 
 export default {
