@@ -129,8 +129,6 @@ export default {
     },
     changeOnline: function() {
       this.$parent.passOnline(this.checkedOnline);
-
-      console.log('blablalba')
     },
     selectSort: function(sortType) {
       this.sort = sortType;

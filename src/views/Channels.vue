@@ -122,7 +122,7 @@ export default {
 
       axios.get(`https://zummie.com/yt888/items/channel?filter[category]=${_this.currentChannel}`)
       .then(function (response) {
-        console.log(response)
+        // console.log(response)
         let responseArray = response.data.data;
         _this.channelData = arraySort(responseArray, 'name');
         _this.heightPoints = response.data.data.length + 20;

@@ -45,6 +45,8 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
+
 import Header from './components/Header.vue';
 import Sidemenu from './components/Sidemenu.vue';
 import { bus } from './main.js'
@@ -64,7 +66,7 @@ export default {
   },
   mounted: function() {
     bus.$on('switchActiveMenu', (data) => {
-      console.log(data)
+      // console.log(data)
     })
 
       this.defineBg();

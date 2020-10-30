@@ -104,7 +104,7 @@ export default {
     this.formattedDate = moment(new Date(utcSeconds)).format('LL');
 
     if(this.preresult === undefined || this.nextresult === undefined) {
-      console.log('is undefined')
+      // console.log('is undefined')
     } else {
       let predateSeconds = this.preresult._source.date * 1000;
       let predateFormatted = moment(new Date(predateSeconds)).format('LL')

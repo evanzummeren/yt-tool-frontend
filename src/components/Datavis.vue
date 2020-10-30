@@ -34,6 +34,7 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 import Chart from 'chart.js'
 
 export default {
@@ -147,7 +148,7 @@ export default {
       this.createNGram(data);
     },
     graphClickEvent: function(event, elem){
-      console.log(event);
+      // console.log(event);
       if (elem.length >= 1) {
         this.$parent.switchView('text');
         this.$router.push(`../../../../../../../../../../search/q/${this.query}/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/asc/gte/${this.ngramArray[elem[0]._index]/1000}/lte/1698371302`)
@@ -201,7 +202,7 @@ export default {
         }
       });
 
-      console.log(chart);
+      // console.log(chart);
     },
     createCatPie: function(data) {
       let chart = new Chart(this.$refs.catpie, {
@@ -214,7 +215,7 @@ export default {
         }
       });
 
-      console.log(chart);
+      // console.log(chart);
     }
   }
 }

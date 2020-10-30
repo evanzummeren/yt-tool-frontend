@@ -97,11 +97,11 @@ export default {
 
       axios.get(`https://zummie.com/yt888/items/video?filter[channel_id]=${id}&fields=video_id,title,subtitles_elastic,published_at`)
       .then(function (response) {
-        console.log(response.data)
+        // console.log(response.data)
         // console.log(this);
         _this.channelData = response.data.data;
 
-        console.log(_this.channelData);
+        // console.log(_this.channelData);
         _this.heightPoints = response.data.data.length + 20;
       })
       .catch( function (error) {

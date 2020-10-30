@@ -137,7 +137,7 @@ export default {
 
       if (type === 'datavis') {
         this.formQuery(this.$route.params.query, this.searchOptions.categories, true);
-        console.log('form query')
+        // console.log('form query')
       } else {
         this.$parent.triggerText();
       }
@@ -287,7 +287,7 @@ export default {
 
       axios.post(serverCredentials.url, query)
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
 
         if ( agg === false ) { // If there is no data aggregation
           _this.resultsMetadata.results = response.data.hits.total;
