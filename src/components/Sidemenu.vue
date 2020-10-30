@@ -23,20 +23,22 @@
       <div class="block">
       <h5>Methodology</h5>
       <router-link to="/channels/1"><li v-on:click="changeView('channels')">Indexed channels</li></router-link>
-      <router-link to="/methodology"><li v-on:click="changeView('methodology')">Technology</li></router-link>
+      <a href="https://medium.com/raditube/uncovering-youtube-a-new-way-to-track-radical-communities-78b6c750a0a3" target="_blank"><li v-on:click="removeSidemenu()">Background information</li></a>
+      <!-- <router-link to="/methodology"><li v-on:click="changeView('methodology')">Technology</li></router-link> -->
       </div>
 
       <div class="block">
       <h5>Support</h5>
-      <router-link to="/help"><li v-on:click="changeView('help')">Help</li></router-link>
-      <router-link to="/contact"><li v-on:click="removeSidemenu()">Contact</li></router-link>
+      <!-- <router-link to="/help"><li v-on:click="changeView('help')">Help</li></router-link> -->
+      <a href="mailto:evz213@nyu.edu" target="_blank"><li v-on:click="removeSidemenu()">Contact</li></a>
+      <!-- <router-link to="/contact"><li v-on:click="removeSidemenu()">Contact</li></router-link> -->
       </div>
 
       <div class="block">
 
       <h5>Social media</h5>
-      <a href="https://www.twitter.com" target="_blank"><li v-on:click="removeSidemenu()">Twitter</li></a>
-      <a hreef="https://www.medium.com" target="_blank"><li v-on:click="removeSidemenu()">Medium</li></a>
+      <a href="https://www.twitter.com/raditube_com" target="_blank"><li v-on:click="removeSidemenu()">Twitter</li></a>
+      <a href="https://medium.com/raditube" target="_blank"><li v-on:click="removeSidemenu()">Medium</li></a>
       </div>
 
     </div>
