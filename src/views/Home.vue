@@ -15,7 +15,7 @@
       </ul>
       <span class="relevant">relevant right now</span>
       <ul>
-        <li><router-link to='/search/q/"voting%20fraud"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"voting fraud"</router-link></li>
+        <li><router-link to='/search/q/"voter%20fraud"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"voter fraud"</router-link></li>
         <li><router-link to='/search/q/"the%20purge"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"the purge"</router-link></li>
       </ul>
     </div>
