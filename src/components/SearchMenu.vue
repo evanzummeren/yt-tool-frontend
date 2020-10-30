@@ -13,12 +13,16 @@
       <div class="categories searchmenu__space">
         <h3>categories</h3>
         <div class="checkboxes">
-          <input type="checkbox" id="altright" value="altright" v-model="checkedCats" @change="changeCategories"><label for="altright">alt-right</label><br/>
+          <h4>political</h4>
+          <input type="checkbox" id="altright" value="altright" v-model="checkedCats" @change="changeCategories"><label for="altright">alt-right (right)</label><br/>
+          <input type="checkbox" id="qanon" value="qanon" v-model="checkedCats" @change="changeCategories"><label for="qanon">qanon (right)</label><br/>
+          <input type="checkbox" id="breadtube" value="breadtube" v-model="checkedCats" @change="changeCategories"><label for="breadtube">breadtube (left)</label><br/>
+          <input type="checkbox" id="marxism" value="marxism" v-model="checkedCats" @change="changeCategories"><label for="marxism">marxism (left)</label><br/><br/><br/>
+
+          <h4>other categories</h4>
           <input type="checkbox" id="althealth" value="althealth" v-model="checkedCats" @change="changeCategories"><label for="althealth">alternative health</label><br/>
-          <input type="checkbox" id="breadtube" value="breadtube" v-model="checkedCats" @change="changeCategories"><label for="breadtube">breadtube</label><br/>
           <input type="checkbox" id="conspiracy" value="conspiracy" v-model="checkedCats" @change="changeCategories"><label for="conspiracy">conspiracy</label><br/>
-          <input type="checkbox" id="qanon" value="qanon" v-model="checkedCats" @change="changeCategories"><label for="qanon">qanon</label><br/>
-          <input type="checkbox" id="marxism" value="marxism" v-model="checkedCats" @change="changeCategories"><label for="marxism">marxism</label>
+
         </div>
 
       </div>
@@ -313,5 +317,13 @@ h3 {
 
 .filters li {
   margin-top: 4px;
+}
+
+h4 {
+  color: #a6a6a6;
+  font-family: 'Flaco';
+  font-weight: 100;
+  margin-top: -18px;
+  font-size: 16px;
 }
 </style>
