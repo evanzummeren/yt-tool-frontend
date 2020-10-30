@@ -39,13 +39,13 @@ export default {
   mounted: function() {
     let _this = this;
 
-      axios.get('http://api.ipstack.com/check?access_key=78aff83ed36b1d5060fd8a1f10e0483b')
-      .then(function (response) {
-        _this.country = response.data.country_code
-      })
-      .catch( function (error) {
-        console.log(error);
-      });
+      // axios.get('http://api.ipstack.com/check?access_key=78aff83ed36b1d5060fd8a1f10e0483b')
+      // .then(function (response) {
+      //   _this.country = response.data.country_code
+      // })
+      // .catch( function (error) {
+      //   console.log(error);
+      // });
     // https://freegeoip.app/json/
   }
 }
