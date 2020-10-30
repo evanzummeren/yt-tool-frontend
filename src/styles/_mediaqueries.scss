@@ -1,0 +1,23 @@
+@media only screen 
+  and (min-width: 320px) 
+  and (max-width: 568px) {
+  
+  .footer__menu, .user span, .blurtext, .categories {
+    display: none;
+  }
+
+  .sidemenu__content {
+    margin-left: 50% !important;
+  }
+
+  .singleresult {
+    font-size: 14px !important;
+    line-height: 72px !important;
+    max-height: 6rem !important;
+  }
+
+  .statusbar {
+    width: 100vw !important;
+  }
+
+}

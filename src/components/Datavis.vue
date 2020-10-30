@@ -21,6 +21,7 @@
       </div>
       <div class="graphcontainers thirdgraph">
         <h4>Channels with most entries</h4>
+        <span class="comingsoon">Coming soon</span>
       </div>
       <div class="graphcontainers fourthgraph">
         <h4>N-gram over months</h4>
@@ -296,20 +297,6 @@ h4 {
   top: 1.2rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 h2, .h1__underheading {
   font-family: 'Flaco';
   font-size: .8rem;
@@ -328,6 +315,14 @@ h1 {
   font-weight: 100;
   color: white;
   margin-bottom: .3rem;
+}
+
+.comingsoon {
+  color: #757575;
+  font-family: 'Flaco';
+  text-transform: uppercase;
+  border: 1px solid #1b1b1b;
+  padding: 8px 12px 6px;
 }
 
 </style>

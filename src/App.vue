@@ -54,9 +54,6 @@ export default {
   components: {Header, Sidemenu},
   data: function() {
     return {
-      showBlock: false,
-      // showBlock: true,
-      pass: "",
       currentActive: "",
       text: true,
       vis: false,
@@ -101,17 +98,13 @@ export default {
     closeSidemenu: function (val) {
       this.sidemenu = val;
     },
-    passEnter: function() {
-      if (this.pass === "tub3") {
-        this.showBlock = false;
-      }
-      console.log('pass')
-    }
   }
 }
 </script>
 
 <style lang="scss">
+@import './styles/mediaqueries';
+
 * {
   box-sizing: border-box;
 }
@@ -340,20 +333,5 @@ body {
   visibility: visible;
 }
 
-.passprotected {
-  height: 100vh;
-  width: 100vw;
-  background: #1D1D1D;
-  position: fixed;
-  z-index: 10000000000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.passinput {
-  width: 200px;
-  font-family: 'Flaco';
-  font-size: 1rem;
-}
 </style>

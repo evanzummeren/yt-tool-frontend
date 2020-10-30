@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-infinite-scroll="loadMore" infinite-scroll-disabled="infiniteScroll.busy" infinite-scroll-distance="10">
-    <Ngram v-if="view === 'text'" />
+    <!-- <Ngram v-if="view === 'text'" /> -->
 
     <SearchMenu 
       v-if="showSearchMenu"
@@ -66,7 +66,7 @@ import NoResults from '../components/NoResults.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
 import Embed from '../components/Embed.vue'
-import Ngram from '../components/Ngram.vue'
+// import Ngram from '../components/Ngram.vue'
 import Datavis from '../components/Datavis.vue'
 const axios = require('axios');
 
@@ -77,7 +77,8 @@ import serverCredentials from '../mixins/server.json';
 export default {
   name: 'Home',
   components: {
-    Result, SearchMenu, Embed, Datavis, Ngram, NoResults
+    Result, SearchMenu, Embed, Datavis, NoResults
+    // Result, SearchMenu, Embed, Datavis, Ngram, NoResults
   },
   data: function() {
     return {
