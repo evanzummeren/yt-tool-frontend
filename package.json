@@ -13,6 +13,7 @@
     "axios": "^0.20.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.20",
     "moment": "^2.29.0",
     "pixi.js": "^5.3.3",
     "simple-analytics-vue": "^1.1.1",
@@ -22,6 +23,8 @@
     "vue-chartjs": "^3.5.1",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.2.0",
+    "vue-simple-range-slider": "^0.1.10",
+    "vue-simple-suggest": "^1.10.3",
     "vue-sprite-animator": "^1.0.1"
   },
   "devDependencies": {

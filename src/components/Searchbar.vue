@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'Searcbar',
+  name: 'Searchbar',
   data: function() {
     return {
       keyword: ""

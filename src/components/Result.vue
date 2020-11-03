@@ -15,7 +15,7 @@
       v-bind:class="{activated: activated}"
 
       v-if="render.author">
-      <span v-if="!showScreenshot">{{author}}</span><span v-if="showScreenshot">{{views}} views</span>
+      <span v-if="!showScreenshot">{{author}}</span><span v-if="showScreenshot">{{cat}} <span v-if="views">– {{views}} views</span></span>
     </span>
 
     <div class="author-circle" 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Search from '../views/Search.vue'
+import NgramDiff from '../views/NgramDiff.vue'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -22,6 +23,12 @@ const routes = [
     // path: '/q/:query/c/:categories',
     name: 'SearchWithEpoch',
     component: Search
+  },
+  {
+    path: '/ngramdiff',
+    // path: '/q/:query/c/:categories',
+    name: 'Ngramdiff',
+    component: NgramDiff
   },
   {
     path: '/channels/:channel',

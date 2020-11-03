@@ -26,9 +26,9 @@
         </svg>
       </div>
 
-    <router-view v-if="!showBlock" />
+    <router-view />
 
-    <div class="footer__menu" v-bind:class="{ 'footer__menu--bgon': menushowbg }">
+    <div v-if="showFooterMenu" class="footer__menu" v-bind:class="{ 'footer__menu--bgon': menushowbg }">
       <ul class="sidenav">
         <router-link to="/search/q/epstein/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc">
           <li v-bind:class="{ 'diamond--active': currentActive === 'search', 'diamond': true }" 
@@ -61,7 +61,8 @@ export default {
       vis: false,
       insetActive: "text",
       sidemenu: false,
-      menushowbg: false
+      menushowbg: false,
+      showFooterMenu: true
     }
   },
   mounted: function() {
@@ -69,12 +70,13 @@ export default {
       // console.log(data)
     })
 
-      this.defineBg();
+    this.defineBg();
   },
   updated: function() {
     this.defineBg();
   },
   methods: {
+    noFooterMenu: function() { this.showFooterMenu = false },
     defineBg: function() {
       if ( this.$route.name === "Search") {
         this.menushowbg = true;
@@ -335,5 +337,56 @@ body {
   visibility: visible;
 }
 
+.one__thirdcontainer {
+  z-index: 100;
+  width: calc(100vw - 5rem);
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+  border-left: 1px solid #4F23FF;
+}
+
+.simple-range-slider {
+  border-bottom: 1px dotted white !important;
+  background: none !important;
+  height: 0px !important;
+}
+
+.simple-range-slider-bg-bar {
+  background: none !important;
+}
+
+
+.input-wrapper input {
+  margin-top: 1rem !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-family: 'Flaco' !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none;
+  background: white;
+  height: 2rem;
+  margin-top: -1px;
+  border-top: 1px solid #474747;
+  border-bottom: 1px solid #8A8A8A;
+  font-family: 'Flaco';
+  font-size: 1rem;
+  color: black;
+  padding-left: 2.5rem !important;
+  background-image: url('./assets/icons/play.svg') !important;
+  background-repeat: no-repeat !important;
+  background-size: 13px !important;
+  background-position: 15px 8px !important;
+}
+
+.suggest-item {
+  font-family: 'Flaco';
+  font-size: .8rem;
+}
+
+.suggest-item:hover {
+  background: #333 !important;
+}
 
 </style>

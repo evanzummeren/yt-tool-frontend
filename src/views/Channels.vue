@@ -1,8 +1,6 @@
 <template>
-  <div class="containerChannels flexcontainer">
-    <div class="first__horizontal"></div>
-    <div class="second__horizontal"></div>
-    <div class="right__vertical"></div>
+  <div class="one__thirdcontainer flexcontainer">
+    <Linework />
 
     <div class="container__left">
       <h2>Indexed channels</h2>
@@ -74,9 +72,9 @@
 
 <script>
 import axios from 'axios';
-import arraySort from 'array-sort'
+import arraySort from 'array-sort';
+import Linework from '../components/Visuals/Linework.vue';
 // var arraySort = require('array-sort');
-
 
 export default {
   name: "Channels",
@@ -89,6 +87,9 @@ export default {
       widthPoints: 10,
       heightPoints: 20
     }
+  },
+  components: {
+    Linework
   },
   created: function() {
     this.widthPoints = Math.ceil(window.innerWidth/64);
@@ -146,14 +147,6 @@ export default {
 <style lang="scss" scoped>
 a {
   display: flex;
-}
-.containerChannels {
-  z-index: 100;
-  width: calc(100vw - 5rem);
-  position: absolute;
-  left: 2rem;
-  top: 2rem;
-  border-left: 1px solid #4F23FF;
 }
 
 .flexcontainer {
@@ -321,34 +314,6 @@ a {
 .box__gradient::-webkit-scrollbar { 
   display: none;  /* Safari and Chrome */
   background: transparent;
-}
-
-.first__horizontal {
-  position: fixed;
-  height: 1px;
-  width: calc(100vw - 2rem);
-  background-color: #474747;
-  margin-top: 0rem;
-  z-index: 12000;
-}
-
-.second__horizontal {
-  position: fixed;
-  height: 1px;
-  width: calc(100vw - 2rem);
-  background-color: #8a8a8a;
-  margin-top: calc(2rem - 1px);
-  z-index: 12000;
-}
-
-.right__vertical {
-  position: fixed;
-  height: calc(100vh - 2rem);
-  width: 1px;
-  background-color: #8a8a8a;
-  margin-top: calc(2rem - 1px);
-  right: 3rem;
-  z-index: 12000;
 }
 
 .splitline {

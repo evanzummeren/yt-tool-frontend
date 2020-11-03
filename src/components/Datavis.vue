@@ -13,6 +13,7 @@
     <div class="container__right">
       <div class="graphcontainers firstgraph">
         <h4>Active vs removed</h4>
+        <!-- <div class="csv">.csv</div> -->
         <canvas id="removed" ref="removed"></canvas>
       </div>
       <div class="graphcontainers secondgraph">
@@ -57,8 +58,8 @@ export default {
   methods: {
     triggerDatavis() {
       // console.log(this.aggs)
-      this.generatePieData(this.aggs.removed);
-      this.generateCommunityData(this.aggs.categories.buckets);
+      if (this.aggs.removed) { this.generatePieData(this.aggs.removed); }
+      if (this.aggs.categories) { this.generateCommunityData(this.aggs.categories.buckets); }
       this.generateNgramData(this.aggs.mentions_over_time.buckets);
     },
     epochToDate(int) {
@@ -66,11 +67,23 @@ export default {
       return `${newD.getMonth() + 1} – ${newD.getFullYear()}`
     },
     generatePieData: function(incoming) {
+      let mappedLabels = [];
+      let numbers = [];
+
+      incoming.buckets.map((item)=> {
+        numbers.push(item.doc_count);
+        if (item.key === 0) {
+          mappedLabels.push('inactive');
+        } else if (item.key === 1) {
+          mappedLabels.push('active');
+        }
+      })
+
       let data = {
-        labels: ['Active', 'Removed'],
+        labels: mappedLabels,
         datasets: [{
-          label: '# of Votes',
-            data: [incoming.buckets[0].doc_count, incoming.buckets[1].doc_count],
+          label: 'Active/Inactive',
+            data: numbers,
             backgroundColor: [
               'rgba(196, 196, 196, 0.8)',
               'rgba(83, 83, 83, 0.8)',
@@ -222,34 +235,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/datavis';
+
 .containerChannels {
   z-index: 1;
   width: calc(100vw - 81px);
   position: absolute;
   top: 2rem;
-}
-
-.flexcontainer {
-  display: flex;
-  min-height: calc(100% - 4rem);
-}
-
-.container__left {
-  width: 20%;
-  background: black;
-  border-right: 1px solid white;
-  padding: 6rem 2rem 0 2rem;
-  min-height: calc(100vh - 4rem);
-}
-
-.container__right {
-  width: 80%;
-  min-height: calc(100vh - 4rem);
-  background: black;
-  border-right: 1px solid #8A8A8A;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
 }
 
 .graphcontainers {
@@ -258,7 +250,6 @@ export default {
   align-items: center;
   position: relative;
   height: 50%;
-
 }
 
 .firstgraph {
@@ -284,7 +275,6 @@ export default {
 }
 
 h4 {
-  // margin: 2.7rem 1.5rem;
   font-family: 'Flaco';
   font-size: .75rem;
   font-weight: 100;
@@ -298,24 +288,14 @@ h4 {
   top: 1.2rem;
 }
 
-h2, .h1__underheading {
+.csv {
   font-family: 'Flaco';
-  font-size: .8rem;
-  font-weight: 100;
-  color: white;
-  text-transform: uppercase;
-}
-
-.h1__underheading {
-  color: #9E9E9E;
-}
-
-h1 {
-  font-family: 'Gil';
-  font-size: 2.5rem;
-  font-weight: 100;
-  color: white;
-  margin-bottom: .3rem;
+  padding: .3rem .5rem;
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1rem;
+  color: #d4d4d4;
+  background: #252525;
 }
 
 .comingsoon {
