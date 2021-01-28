@@ -23,7 +23,7 @@
           <input type="checkbox" id="althealth" value="althealth" v-model="checkedCats" @change="changeCategories"><label for="althealth">alternative health</label><br/>
           <input type="checkbox" id="conspiracy" value="conspiracy" v-model="checkedCats" @change="changeCategories"><label for="conspiracy">conspiracy</label><br/>
           <input type="checkbox" id="nlconspiracy" value="nlconspiracy" v-model="checkedCats" @change="changeCategories"><label for="nlconspiracy">dutch conspiracy</label><br/>
-          <input type="checkbox" id="spirituality" value="spirituality" v-model="checkedCats" @change="changeCategories"><label for="nlconspiracy">dutch conspiracy</label><br/>
+          <input type="checkbox" id="spirituality" value="spirituality" v-model="checkedCats" @change="changeCategories"><label for="nlconspiracy">spirituality</label><br/>
 
         </div>
 
