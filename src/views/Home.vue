@@ -10,14 +10,12 @@
         <li><router-link to='/search/q/"biblical%20times"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"biblical times"</router-link></li>
         <li><router-link to='/search/q/"the%20truth%20there"~3/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"the truth there"~3</router-link></li>
         <li><router-link to='/search/q/"q%20says"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"q says"</router-link></li>
-        <li v-if="country === 'NL'"><router-link to='/search/q/"de%20overheid"/cat/nlconspiracy/sort/desc'>"de overheid"</router-link></li>
-        <li v-if="country === 'NL'"><router-link to='/search/q/rechten/cat/nlconspiracy/sort/desc'>rechten</router-link></li>
       </ul>
-      <span class="relevant">relevant right now</span>
+      <!-- <span class="relevant">relevant right now</span>
       <ul>
         <li><router-link to='/search/q/"voter%20fraud"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"voter fraud"</router-link></li>
         <li><router-link to='/search/q/"the%20purge"/cat/qanon,altright,althealth,breadtube,conspiracy,marxism/sort/desc'>"the purge"</router-link></li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>
@@ -35,18 +33,6 @@ export default {
     return {
       country: "US"
     }
-  },
-  mounted: function() {
-    // let _this = this;
-
-      // axios.get('http://api.ipstack.com/check?access_key=78aff83ed36b1d5060fd8a1f10e0483b')
-      // .then(function (response) {
-      //   _this.country = response.data.country_code
-      // })
-      // .catch( function (error) {
-      //   console.log(error);
-      // });
-    // https://freegeoip.app/json/
   }
 }
 </script>

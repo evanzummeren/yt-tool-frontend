@@ -6,16 +6,6 @@
       @switch="switchActive"
       @close="closeSidemenu" />
 
-      <div class="passprotected" v-if="showBlock">
-
-        <input 
-          class="passinput" 
-          v-model="pass" 
-          v-on:keyup.enter="passEnter" 
-          placeholder="Password">
-
-      </div>
-
       <div class="verticalline--top"></div>
       <div class="verticalline--header"></div>
       <div class="menu" v-on:click="closeSidemenu(true)">
@@ -387,6 +377,25 @@ body {
 
 .suggest-item:hover {
   background: #333 !important;
+}
+
+// Tables
+.vgt-table.nocturnal.bordered, .vgt-table.nocturnal.bordered td {
+  border: 1px dotted #8a8a8a !important;
+}
+
+.vgt-table.nocturnal {
+  color: white !important;
+}
+
+.vgt-table.nocturnal {
+  background: black !important;
+}
+
+.vgt-table.nocturnal thead th {
+  background-color: black;
+  background-image: url('./assets/etch.svg') !important;
+  background-size: cover !important;
 }
 
 </style>

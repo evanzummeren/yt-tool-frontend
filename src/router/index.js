@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Search from '../views/Search.vue'
 import NgramDiff from '../views/NgramDiff.vue'
+import Removed from '../views/Removed.vue'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -14,21 +15,23 @@ const routes = [
   },
   {
     path: '/search/q/:query/cat/:categories/sort/:sort',
-    // path: '/q/:query/c/:categories',
     name: 'Search',
     component: Search
   },
   {
     path: '/search/q/:query/cat/:categories/sort/:sort/gte/:gte/lte/:lte',
-    // path: '/q/:query/c/:categories',
     name: 'SearchWithEpoch',
     component: Search
   },
   {
     path: '/ngramdiff',
-    // path: '/q/:query/c/:categories',
     name: 'Ngramdiff',
     component: NgramDiff
+  },
+  {
+    path: '/removed',
+    name: 'Removed',
+    component: Removed
   },
   {
     path: '/channels/:channel',
