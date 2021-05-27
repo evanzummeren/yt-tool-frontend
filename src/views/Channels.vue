@@ -12,6 +12,7 @@
         <li @click="goRoute()"><router-link to="/channels/8">Alternative health</router-link></li>
         <li @click="goRoute()"><router-link to="/channels/5">Breadtube</router-link></li>
         <li @click="goRoute()"><router-link to="/channels/3">Conspiracy</router-link></li>
+        <li @click="goRoute()"><router-link to="/channels/17">Dutch Conspiracy</router-link></li>
         <li @click="goRoute()"><router-link to="/channels/1">QAnon</router-link></li>
         <li @click="goRoute()"><router-link to="/channels/16">Marxism</router-link></li>
       </ul>
