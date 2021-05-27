@@ -25,10 +25,6 @@ Vue.use(VueSpriteAnimator)
 Vue.use(infiniteScroll)
 Vue.use(VueGoodTablePlugin)
 
-
-// import VueAmplitude from './mixins/amplitude.js';
-// Vue.use(VueAmplitude, { apiKey: 'b79dc91978a6ebd27882e8f581c2c36d' });
-
 let amplitudeConfig = amplitude.getInstance();
 amplitudeConfig.init("b79dc91978a6ebd27882e8f581c2c36d");
 
@@ -38,8 +34,6 @@ router.afterEach((to) => {
   } else {
     amplitudeConfig.logEvent(`Tool — ${to.name}`)
   }
-
-  console.log(to)
 })
 
 Sentry.init({
