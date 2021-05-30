@@ -46,6 +46,8 @@
       </li>
     </ul>
 
+    <Newsletter v-if="showNewsletter" />
+
     <div class="statusbar" v-if="view === 'text'">
       <div class="statusbar__spinnercontainer">
         <div class="spinner" v-if="infiniteScroll.busy">
@@ -65,7 +67,9 @@ import Result from '../components/Result.vue';
 import NoResults from '../components/NoResults.vue';
 import SearchMenu from '../components/SearchMenu.vue';
 
-import Embed from '../components/Embed.vue'
+import Newsletter from '../components/Newsletter.vue'
+
+import Embed from '../components/Embed.vue';
 // import Ngram from '../components/Ngram.vue'
 import Datavis from '../components/Datavis.vue'
 const axios = require('axios');
@@ -77,7 +81,7 @@ import serverCredentials from '../mixins/server.json';
 export default {
   name: 'Home',
   components: {
-    Result, SearchMenu, Embed, Datavis, NoResults
+    Result, SearchMenu, Embed, Datavis, NoResults, Newsletter
     // Result, SearchMenu, Embed, Datavis, Ngram, NoResults
   },
   data: function() {
@@ -88,6 +92,7 @@ export default {
         dataUrl: "",
         open: false
       },
+      showNewsletter: false,
       searchOptions: {
         categories: ['altright', 'althealth'],
         sort: "desc",
@@ -323,6 +328,10 @@ export default {
         this.resultsMetadata.noResults = true;
       } else {
         this.resultsMetadata.noResults = false;
+      }
+
+      if (meta.currentlyShowing > 40) {
+        this.showNewsletter = true;
       }
 
       if ( meta.results < this.infiniteScroll.size) {

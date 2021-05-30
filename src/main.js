@@ -6,17 +6,13 @@ import SimpleAnalytics from "simple-analytics-vue";
 import * as Sentry from "@sentry/browser";
 import { Vue as VueIntegration } from "@sentry/integrations";
 import { Integrations } from "@sentry/tracing";
-
 import amplitude from 'amplitude-js';
-
-
 import VueGoodTablePlugin from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css'
 
 var infiniteScroll =  require('vue-infinite-scroll');
 
 // import the styles
-
 Vue.config.productionTip = false;
 
 export const bus = new Vue()
